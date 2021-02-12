@@ -1,19 +1,51 @@
-name: Run tests
+name: Ruby
 on:
   push:
     branches: [ main ]
   pull_request:
+    branches: [ main ]
 
 jobs:
-  build:
-    name: Build Docker image
+  test:
     runs-on: ubuntu-latest
+    services:
+      db:
+        env:
+          POSTGRES_PASSWORD: postgres
+        image: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v1
-
-      - name: Build image
-        run: docker-compose build
-
-      - name: Run tests
-        run: docker-compose run web bundle exec rails test
+    - uses: actions/checkout@v2
+      #- name: Install PostgreSQL client
+      #  run: sudo apt-get update -y && sudo apt-get install -y libpq-dev
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.6
+        bundler-cache: true
+    - name: Set up yarn
+      run: |
+        yarn install --pure-lockfile
+    - name: Setup database schema
+      env:
+        PGHOST: localhost
+        PGPASSWORD: postgres
+        RAILS_ENV: test
+      run: bin/rails db:setup
+    - name: Run database migrations
+      env:
+        PGHOST: localhost
+        PGPASSWORD: postgres
+        RAILS_ENV: test
+      run: bin/rails db:migrate
+    - name: Run tests
+      env:
+        PGHOST: localhost
+        PGPASSWORD: postgres
+      run: bin/rails test
