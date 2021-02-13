@@ -2,10 +2,12 @@
 
 one:
   id: 1
-  username: MyUser1
-  password: password
+  user_id: 1
+  title: My meme
+  img_data: 
 
 two:
   id: 2
-  username: MyUser2
-  password: password
+  user_id: 2
+  title: MyString
+  img_data: MyString
