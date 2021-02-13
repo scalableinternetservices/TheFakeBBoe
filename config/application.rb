@@ -18,5 +18,15 @@ module App
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    if ENV.key?('RAILS_TMP')
+      config.assets.configure do |env|
+        env.cache = Sprockets::Cache::FileStore.new(
+          "#{ENV['RAILS_TMP']}/cache/assets",
+          config.assets.cache_limit,
+          env.logger
+        )
+      end
+    end
   end
 end
