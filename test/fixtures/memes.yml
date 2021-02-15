@@ -1,13 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  id: 1
-  user_id: 1
-  title: My meme
-  img_data: 
-
-two:
-  id: 2
-  user_id: 2
-  title: MyString
-  img_data: MyString
+# one:
+#   id: 1
+#   user_id: 1
+#   title: My meme
+#   img_data: !!binary ""
+# 
+# two:
+#   id: 2
+#   user_id: 2
+#   title: MyString
+#   img_data: !!binary ""
