@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class MemesTest < ApplicationSystemTestCase
   setup do
-    @meme = memes(:one)
+    # @meme = memes(:one)
   end
 
   test "visiting the index" do
