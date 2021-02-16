@@ -1,0 +1,2 @@
+module UserFeedSubscriptionsHelper
+end

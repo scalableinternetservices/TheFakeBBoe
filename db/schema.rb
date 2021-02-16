@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_15_055855) do
+ActiveRecord::Schema.define(version: 2021_02_16_201831) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,15 @@ ActiveRecord::Schema.define(version: 2021_02_15_055855) do
     t.index ["user_id"], name: "index_memes_on_user_id"
   end
 
+  create_table "user_feed_subscriptions", force: :cascade do |t|
+    t.bigint "subscriber_id", null: false
+    t.bigint "subscribed_to_user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["subscribed_to_user_id"], name: "index_user_feed_subscriptions_on_subscribed_to_user_id"
+    t.index ["subscriber_id"], name: "index_user_feed_subscriptions_on_subscriber_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "password"
@@ -62,4 +71,6 @@ ActiveRecord::Schema.define(version: 2021_02_15_055855) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "memes", "users"
+  add_foreign_key "user_feed_subscriptions", "users", column: "subscribed_to_user_id"
+  add_foreign_key "user_feed_subscriptions", "users", column: "subscriber_id"
 end
