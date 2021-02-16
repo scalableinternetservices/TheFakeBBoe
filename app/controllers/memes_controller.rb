@@ -53,7 +53,6 @@ class MemesController < ApplicationController
   # DELETE /memes/1 or /memes/1.json
   def destroy
     @meme.destroy
-    @meme.image.purge
     respond_to do |format|
       format.html { redirect_to memes_url, notice: "Meme was successfully destroyed." }
       format.json { head :no_content }
