@@ -53,6 +53,23 @@ generate scaffold <model_name>`.
 
 ### Prototyping models without user creation
 
+#### Rails console method
+
+Once you have postgres running in docker, run `bundle exec rails console`:
+```
+irb(main):006:0> user = User.new({ :id => 0, :username => "testuser", :password => "password" })
+irb(main):007:0> user.save
+  TRANSACTION (0.2ms)  BEGIN
+  User Create (0.6ms)  INSERT INTO "users" ("id", "username", "password", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["id", 0], ["username", "testuser"], ["password", "password"], ["created_at", "2021-02-16 02:28:43.461203"], ["updated_at", "2021-02-16 02:28:43.461203"]]
+  TRANSACTION (5.9ms)  COMMIT
+=> true
+irb(main):008:0> user
+=> #<User id: 0, username: "testuser", password: [FILTERED], created_at: "2021-02-16 02:28:43.461203000 +0000", updated_at: "2021-02-16 02:28:43.461203000 +0000">
+
+```
+
+#### Manual method
+
 Once you have postgres running in docker, connect to it with
 ```
 psql postgresql://postgres:postgres@localhost:5432
