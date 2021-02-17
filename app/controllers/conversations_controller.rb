@@ -80,6 +80,8 @@ class ConversationsController < ApplicationController
   end
 
   def createUser
+    # DEBUG FUNCTION
+    # Create a new user. Only use this just for debugging. Delete this later
     username = Time.now
     newUser = User.new(:password => "password", :username => "#{username}")
     p username
