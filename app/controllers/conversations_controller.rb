@@ -1,5 +1,5 @@
 class ConversationsController < ApplicationController
-  before_action :set_conversation, only: %i[ show edit update destroy addUser createUser ]
+  before_action :set_conversation, only: %i[ show edit update destroy addUser writeMessage createUser ]
 
   # GET /conversations or /conversations.json
   def index
@@ -9,6 +9,7 @@ class ConversationsController < ApplicationController
   # GET /conversations/1 or /conversations/1.json
   def show
     @users = @conversation.users
+    @messages = @conversation.messages
   end
 
   # GET /conversations/new
@@ -91,6 +92,27 @@ class ConversationsController < ApplicationController
         format.html { redirect_to @conversation, notice: "Username #{username}" }
         format.json { render :show, status:  :ok, location: @conversation }
       end
+  end
+
+  def writeMessage
+    username = params[:inputMessage][:username]
+
+    content = params[:inputMessage][:msg]
+    newMessage = Message.new(:content => content)
+    newMessage.save
+    @conversation.messages << newMessage
+
+    if (User.exists?(username: username)) 
+      userToAdd = User.find_by_username(username)
+      userToAdd.messages << newMessage
+    end
+
+    p @conversation.messages
+    respond_to do |format|
+      format.html { redirect_to @conversation, notice: "Message written" }
+      format.json { render :show, status: :ok, location: @conversation }
+    end
+
   end
 
   private
