@@ -43,3 +43,5 @@ vendor/bundle
 # Ignore downloaded file fixtures
 /test/fixtures/files/*.jpg
 /test/fixtures/files/*.png
+
+*.jiamo

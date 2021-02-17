@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>User Feeds</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @user_feeds.each do |user_feed| %>
+      <tr>
+        <td><%= link_to 'Show', user_feed %></td>
+        <td><%= link_to 'Edit', edit_user_feed_path(user_feed) %></td>
+        <td><%= link_to 'Destroy', user_feed, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New User Feed', new_user_feed_path %>

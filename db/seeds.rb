@@ -5,3 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+user1 = User.create(username:"abc",password:"def")
+user2 = User.create(username:"vvv",password:"zzz")
+feed = UserFeedSubscription.create(subscriber_user: user1, subscribed_to_user: user2)
