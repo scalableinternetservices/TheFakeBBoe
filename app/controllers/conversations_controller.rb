@@ -1,5 +1,5 @@
 class ConversationsController < ApplicationController
-  before_action :set_conversation, only: %i[ show edit update destroy ]
+  before_action :set_conversation, only: %i[ show edit update destroy addUser createUser ]
 
   # GET /conversations or /conversations.json
   def index
@@ -8,6 +8,7 @@ class ConversationsController < ApplicationController
 
   # GET /conversations/1 or /conversations/1.json
   def show
+    @users = @conversation.users
   end
 
   # GET /conversations/new
@@ -54,6 +55,40 @@ class ConversationsController < ApplicationController
       format.html { redirect_to conversations_url, notice: "Conversation was successfully destroyed." }
       format.json { head :no_content }
     end
+  end
+
+  def addUser
+    # First, check if the user exists
+    username = params[:addUserForm][:username]
+    if (User.exists?(username: username)) 
+      userToAdd = User.find_by_username(username)
+      userToAdd.conversations << @conversation
+      # @conversation.users << userToAdd
+      
+
+      respond_to do |format|
+        format.html { redirect_to @conversation, notice: "User was successfully added to conversation" }
+        format.json { render :show, status: :ok, location: @conversation }
+      end
+    else
+      # Alert to screen
+      respond_to do |format|
+        format.html { redirect_to @conversation, notice: "Username does not exist" }
+        format.json { render :show, status:  :unprocessable_entity, location: @conversation }
+      end
+    end
+  end
+
+  def createUser
+    username = Time.now
+    newUser = User.new(:password => "password", :username => "#{username}")
+    p username
+    newUser.save
+
+    respond_to do |format|
+        format.html { redirect_to @conversation, notice: "Username #{username}" }
+        format.json { render :show, status:  :ok, location: @conversation }
+      end
   end
 
   private
