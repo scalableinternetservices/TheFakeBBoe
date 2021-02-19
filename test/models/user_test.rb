@@ -1,25 +1,26 @@
-require "test_helper"
+require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @user = User.new(username: "Bob", email: "bob@example.com", password: "foooobar", password_confirmation: "foooobar")
+    @user = User.new(username: 'Bob', email: 'bob@example.com',
+                     password: 'foooobar', password_confirmation: 'foooobar')
   end
 
-  test "should be valid" do
+  test 'should be valid' do
     assert @user.valid?
   end
 
-  test "username should be present" do
-    @user.username = "     "
+  test 'username should be present' do
+    @user.username = '     '
     assert_not @user.valid?
   end
 
-  test "email should be present" do
-    @user.email = "     "
+  test 'email should be present' do
+    @user.email = '     '
     assert_not @user.valid?
   end
 
-  test "email validation should accept valid addresses" do
+  test 'email validation should accept valid addresses' do
     valid_addresses = %w[user@example.com USER@foo.COM A_US-ER@foo.bar.org
                          first.last@foo.jp alice+bob@baz.cn]
     valid_addresses.each do |valid_address|
@@ -28,7 +29,7 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  test "email validation should reject invalid addresses" do
+  test 'email validation should reject invalid addresses' do
     invalid_addresses = %w[user@example,com user_at_foo.org user.name@example.
                            foo@bar_baz.com foo@bar+baz.com]
     invalid_addresses.each do |invalid_address|
@@ -37,27 +38,33 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  test "email addresses should be unique" do
+  test 'email addresses should be unique' do
     duplicate_user = @user.dup
     @user.save
     assert_not duplicate_user.valid?
   end
 
-  test "email addresses should be case-insensitive" do
+  test 'email addresses should be case-insensitive' do
     duplicate_user = @user.dup
     duplicate_user.email = @user.email.upcase
     @user.save
     assert_not duplicate_user.valid?
   end
 
-  test "password should be present (nonblank)" do
-    @user.password = @user.password_confirmation = " " * 8
+  test 'password should be present (nonblank)' do
+    @user.password = @user.password_confirmation = ' ' * 8
     assert_not @user.valid?
   end
 
-  test "password should have a minimum length" do
-    @user.password = @user.password_confirmation = "a" * 7
+  test 'password should have a minimum length' do
+    @user.password = @user.password_confirmation = 'a' * 7
     assert_not @user.valid?
   end
 
+  test 'Create user' do
+    newuser = User.new(username: 'charles', email: 'chuck@echeese.com',
+                       password: 'entertainment cheese',
+                       password_confirmation: 'entertainment cheese')
+    assert newuser
+  end
 end

@@ -36,3 +36,10 @@ yarn-debug.log*
 .yarn-integrity
 *.pem
 .DS_Store
+
+# Ignore local ruby packages
+vendor/bundle
+
+# Ignore downloaded file fixtures
+/test/fixtures/files/*.jpg
+/test/fixtures/files/*.png
