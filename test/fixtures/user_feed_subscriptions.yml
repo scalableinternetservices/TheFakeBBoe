@@ -7,8 +7,8 @@
 one: 
 # column: value
 #
-id : 1
-subscriber_user: 1
-subscribed_to_user: 2
-two: 
+  id : 1
+  subscriber_user_id: 1
+  subscribed_to_user_id: 2
+#two: 
 # column: value
