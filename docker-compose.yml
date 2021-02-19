@@ -18,6 +18,11 @@ services:
       - "3000:3000"
     volumes:
       - .:/app:cached
+      - thefakebboe_storage:/rails_storage
+    environment:
+      RAILS_STORAGE: "/rails_storage"
+      PGHOST: db
 
 volumes:
   thefakebboe_db:
+  thefakebboe_storage:

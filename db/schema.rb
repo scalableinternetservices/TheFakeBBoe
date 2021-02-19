@@ -43,11 +43,35 @@ ActiveRecord::Schema.define(version: 2021_02_19_060722) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "conversations", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "friendships", id: false, force: :cascade do |t|
     t.bigint "profile_id"
     t.bigint "friend_id"
     t.index ["friend_id"], name: "index_friendships_on_friend_id"
     t.index ["profile_id"], name: "index_friendships_on_profile_id"
+  end
+
+  create_table "memes", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "title"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_memes_on_user_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "conversation_id", null: false
+    t.string "content"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -66,14 +90,25 @@ ActiveRecord::Schema.define(version: 2021_02_19_060722) do
 
   create_table "users", force: :cascade do |t|
     t.string "username"
-    t.string "password"
+    t.string "password_digest"
+    t.string "email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  create_table "users_conversations", id: false, force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "conversation_id"
+    t.index ["conversation_id"], name: "index_users_conversations_on_conversation_id"
+    t.index ["user_id"], name: "index_users_conversations_on_user_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "memes", "users"
+  add_foreign_key "messages", "conversations"
+  add_foreign_key "messages", "users"
   add_foreign_key "profiles", "profiles", column: "follower_id"
   add_foreign_key "profiles", "profiles", column: "rival_id"
 end
