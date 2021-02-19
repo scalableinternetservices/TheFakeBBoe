@@ -4,4 +4,5 @@ class Message < ApplicationRecord
 
   validates :user, presence: true
   validates :conversation, presence: true
+  validates_length_of :content, allow_blank: false
 end

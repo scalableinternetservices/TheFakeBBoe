@@ -10,6 +10,7 @@ class ConversationsController < ApplicationController
   def show
     @users = @conversation.users
     @messages = @conversation.messages
+
   end
 
   # GET /conversations/new
@@ -61,8 +62,9 @@ class ConversationsController < ApplicationController
   def addUser
     # First, check if the user exists
     username = params[:addUserForm][:username]
-    if (User.exists?(username: username)) 
-      userToAdd = User.find_by_username(username)
+    userToAdd = User.find_by_username(username)
+    if (userToAdd != nil and not @conversation.users.include?(userToAdd)) 
+      
       userToAdd.conversations << @conversation
       # @conversation.users << userToAdd
       
@@ -72,9 +74,10 @@ class ConversationsController < ApplicationController
         format.json { render :show, status: :ok, location: @conversation }
       end
     else
-      # Alert to screen
+      # User does not exist
+      @conversation.errors.add(:users, "Invalid username")
       respond_to do |format|
-        format.html { redirect_to @conversation, notice: "Username does not exist" }
+        format.html { redirect_to @conversation, notice: "Invalid username" }
         format.json { render :show, status:  :unprocessable_entity, location: @conversation }
       end
     end
@@ -99,18 +102,40 @@ class ConversationsController < ApplicationController
 
     content = params[:inputMessage][:msg]
     newMessage = Message.new(:content => content)
-    newMessage.save
-    @conversation.messages << newMessage
 
     if (User.exists?(username: username)) 
       userToAdd = User.find_by_username(username)
-      userToAdd.messages << newMessage
-    end
+      if not @conversation.users.include?(userToAdd) # contains userToAdd
+        # User not authorized to add a message to this conversation
+        @conversation.errors.add(:users, "User does not belong to conversation")
+        respond_to do |format|
+          format.html { redirect_to @conversation, notice: "User is not part of this conversation" }
+          format.json { render :show, status: :unprocessable_entity, location: @conversation }
+        end
 
-    p @conversation.messages
-    respond_to do |format|
-      format.html { redirect_to @conversation, notice: "Message written" }
-      format.json { render :show, status: :ok, location: @conversation }
+        return
+      end
+
+      newMessage.user_id = userToAdd.id
+      newMessage.conversation_id = @conversation.id
+
+      respond_to do |format|
+        if newMessage.save             
+          format.html { redirect_to @conversation, notice: "Message written" }
+          format.json { render :show, status: :ok, location: @conversation }
+        else
+          @conversation.errors.add(:users, "Invalid message write")
+          format.html { redirect_to @conversation, notice: "Message not written" }
+          format.json { render :show, status: :unprocessable_entity, location: @conversation }
+        end
+      end
+    else 
+      # User does not exist
+      @conversation.errors.add(:users, "Invalid username")
+      respond_to do |format|
+        format.html { redirect_to @conversation, notice: "Invalid username" }
+        format.json { render :show, status: :unprocessable_entity, location: @conversation }
+      end
     end
 
   end
