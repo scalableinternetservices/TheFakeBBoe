@@ -50,4 +50,6 @@ jobs:
       env:
         PGHOST: localhost
         PGPASSWORD: postgres
-      run: bin/rails test
+      run: |
+        bin/rails webpacker:compile
+        bin/rails test
