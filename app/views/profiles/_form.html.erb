@@ -16,6 +16,33 @@
     <%= form.text_field :name %>
   </div>
 
+  <div class="field">
+    <%= form.label :age %>
+    <%= form.number_field :age %>
+  </div>
+
+  <div class="field">
+    <%= form.label :location %>
+    <%= form.text_field :location %>
+  </div>
+
+  <div class="field">
+    <%= form.label :occupation %>
+    <%= form.text_field :occupation %>
+  </div>
+
+  <div class="field">
+    <%= form.label :bio %>
+    <%= form.text_area :bio %>
+  </div>
+
+  <!-- TODO: add attributes
+  
+      t.references :follower, foreign_key: { to_table: :profiles }
+      t.references :rival, foreign_key: { to_table: :profiles }
+  
+   -->
+
   <div class="actions">
     <%= form.submit %>
   </div>

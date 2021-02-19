@@ -1,5 +1,5 @@
 class ProfilesController < ApplicationController
-  before_action :set_profile, only: %i[ show edit update destroy ]
+  before_action :set_profile, only: %i[ show edit update destroy addFriend ]
 
   # GET /profiles or /profiles.json
   def index
@@ -8,6 +8,7 @@ class ProfilesController < ApplicationController
 
   # GET /profiles/1 or /profiles/1.json
   def show
+    @friends = @profile.friends
   end
 
   # GET /profiles/new
@@ -47,6 +48,29 @@ class ProfilesController < ApplicationController
     end
   end
 
+  # Adds an existing profile as a friend
+  def addFriend
+    # First, check if the profile exists
+    nameToAdd = params[:addFriendForm][:name]
+    if (Profile.exists?(name: nameToAdd)) 
+      profileToAdd = Profile.find_by_name(nameToAdd)
+      
+      @profile.friends << profileToAdd.clone()
+      #raise profileToAdd.name + " " + @profile.friends[0].name + " " + @profile.friends[1].name + " " + @profile.friends[2].name + " " + @profile.friends[3].name + " " + @profile.friends[4].name + " " + @profile.friends[5].name + " " + @profile.friends[6].name + " " + @profile.friends[7].name + " " + @profile.friends[-1].name
+
+
+      respond_to do |format|
+        format.html { redirect_to @profile, notice: "Profile was successfully befriended" }
+        format.json { render :show, status: :ok, location: @profile }
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to @profile, notice: "Name does not exist" }
+        format.json { render :show, status:  :unprocessable_entity, location: @profile }
+      end
+    end
+  end
+
   # DELETE /profiles/1 or /profiles/1.json
   def destroy
     @profile.destroy
@@ -65,6 +89,6 @@ class ProfilesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def profile_params
       # TODO: use current logged in user
-      params.require(:profile).permit(:name)
+      params.require(:profile).permit(:name, :age, :location, :occupation, :bio)
     end
 end

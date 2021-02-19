@@ -1,9 +1,40 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
-  <%= @profile.name %>
+  <strong>Name: </strong><%= @profile.name %><span> (<%= @profile.age %>)</span>
 </p>
+<p>
+  Lives in <i><%= @profile.location %><i>
+</p>
+<p>
+  Works as a <i><%= @profile.occupation %><i>
+</p>
+<p>
+  Bio: <%= @profile.bio %>
+</p>
+
+<br/>
+
+<strong>Friends: </strong>
+<ul>
+<% @friends.each do |friend| %>
+  <li><%= friend.name %></li>
+<% end %>
+</ul>
+
+<br/>
+
+<%= form_tag :action => 'addFriend' do %>
+<%= text_area :addFriendForm, :name %>
+<%= submit_tag "Add Friend" %>
+<% end %>
+
+<!-- TODO: add attributes 
+
+  t.references :follower, foreign_key: { to_table: :profiles }
+  t.references :rival, foreign_key: { to_table: :profiles }
+
+-->
 
 <%= link_to 'Edit', edit_profile_path(@profile) %> |
 <%= link_to 'Back', profiles_path %>

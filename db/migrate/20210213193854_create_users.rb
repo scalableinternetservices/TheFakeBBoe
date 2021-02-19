@@ -4,7 +4,7 @@ class CreateUsers < ActiveRecord::Migration[6.1]
       t.string :username
       t.string :password
       # t.date :created_at
-
+      
       t.timestamps
     end
     add_index :users, :username, unique: true
