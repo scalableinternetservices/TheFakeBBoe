@@ -1,7 +1,4 @@
 class User < ApplicationRecord
-<<<<<<< HEAD
-  has_many :meme
-=======
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
   before_save { self.email = email.downcase }
@@ -18,5 +15,4 @@ class User < ApplicationRecord
   has_many :messages, dependent: :delete_all
   has_many :meme
   has_many :profile
->>>>>>> db78c8d9f969ba3bc675b30b6317f36a853672d5
 end

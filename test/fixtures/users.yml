@@ -3,19 +3,11 @@
 one:
   id: 1
   username: MyUser1
-<<<<<<< HEAD
-  password: password
-=======
   email: user1@example.com
   password_digest: falksjfoiawjefoiajweofajwlkfdjlksajdflkj
->>>>>>> db78c8d9f969ba3bc675b30b6317f36a853672d5
 
 two:
   id: 2
   username: MyUser2
-<<<<<<< HEAD
-  password: password
-=======
   email: user2@example.com
   password_digest: falksjfoiawjefoiajweofajwlkfdjlksajdflkj
->>>>>>> db78c8d9f969ba3bc675b30b6317f36a853672d5

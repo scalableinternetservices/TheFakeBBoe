@@ -64,15 +64,6 @@ ActiveRecord::Schema.define(version: 2021_02_19_060722) do
     t.index ["user_id"], name: "index_memes_on_user_id"
   end
 
-  create_table "user_feed_subscriptions", force: :cascade do |t|
-    t.bigint "subscriber_user_id", null: false
-    t.bigint "subscribed_to_user_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["subscribed_to_user_id"], name: "index_user_feed_subscriptions_on_subscribed_to_user_id"
-    t.index ["subscriber_user_id"], name: "index_user_feed_subscriptions_on_subscriber_user_id"
-  end
-  
   create_table "messages", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "conversation_id", null: false
@@ -97,6 +88,15 @@ ActiveRecord::Schema.define(version: 2021_02_19_060722) do
     t.index ["rival_id"], name: "index_profiles_on_rival_id"
   end
 
+  create_table "user_feed_subscriptions", force: :cascade do |t|
+    t.bigint "subscriber_user_id", null: false
+    t.bigint "subscribed_to_user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["subscribed_to_user_id"], name: "index_user_feed_subscriptions_on_subscribed_to_user_id"
+    t.index ["subscriber_user_id"], name: "index_user_feed_subscriptions_on_subscriber_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username"
     t.string "password_digest"
@@ -106,13 +106,6 @@ ActiveRecord::Schema.define(version: 2021_02_19_060722) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "memes", "users"
-  add_foreign_key "user_feed_subscriptions", "users", column: "subscribed_to_user_id"
-  add_foreign_key "user_feed_subscriptions", "users", column: "subscriber_user_id"
-  
-  
   create_table "users_conversations", id: false, force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "conversation_id"
@@ -127,4 +120,6 @@ ActiveRecord::Schema.define(version: 2021_02_19_060722) do
   add_foreign_key "messages", "users"
   add_foreign_key "profiles", "profiles", column: "follower_id"
   add_foreign_key "profiles", "profiles", column: "rival_id"
+  add_foreign_key "user_feed_subscriptions", "users", column: "subscribed_to_user_id"
+  add_foreign_key "user_feed_subscriptions", "users", column: "subscriber_user_id"
 end

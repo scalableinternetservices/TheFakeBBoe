@@ -41,6 +41,6 @@ class UserFeedsController < ApplicationController
     end
 
     def get_user_id_from_token
-      return 83
+      return User.first[:id]
     end
 end

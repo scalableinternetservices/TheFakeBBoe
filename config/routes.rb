@@ -1,10 +1,7 @@
 Rails.application.routes.draw do
-<<<<<<< HEAD
   resources :user_feeds
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
-  resources :memes
-=======
   root 'sessions#new'
 
   get 'sessions/new'
@@ -26,5 +23,4 @@ Rails.application.routes.draw do
 
   resources :profiles
   post '/profiles/:id/addFriend', to: 'profiles#addFriend', as: :profile_add_friend
->>>>>>> db78c8d9f969ba3bc675b30b6317f36a853672d5
 end
