@@ -1,4 +1,16 @@
 Rails.application.routes.draw do
+  root 'sessions#new'
+
+  get 'sessions/new'
+
+  resources :users
+
+  get    'signup'  => 'users#new'
+  get    'login'   => 'sessions#new'
+  post   'login'   => 'sessions#create'
+  # delete 'logout'  => 'sessions#destroy'
+  get 'logout' => 'sessions#destroy'
+
   resources :conversations
   post '/conversations/:id/addUser', to: 'conversations#addUser', as: :conversation_add_user
   post '/conversations/:id/writeMessage', to: 'conversations#writeMessage', as: :conversation_write_message
