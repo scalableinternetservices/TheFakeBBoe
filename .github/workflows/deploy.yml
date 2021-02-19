@@ -43,9 +43,13 @@ jobs:
         PGHOST: localhost
         PGPASSWORD: postgres
         RAILS_ENV: test
-      run: bin/rails db:migrate
+      run: |
+        bin/rails active_storage:install
+        bin/rails db:migrate
     - name: Run tests
       env:
         PGHOST: localhost
         PGPASSWORD: postgres
-      run: bin/rails test
+      run: |
+        bin/rails webpacker:compile
+        bin/rails test
