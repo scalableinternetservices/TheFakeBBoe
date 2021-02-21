@@ -1,5 +1,6 @@
 class MemesController < ApplicationController
-  before_action :set_meme, only: %i[ show edit update destroy image ]
+  before_action :set_meme, only: %i[ show edit update destroy ]
+  before_action :require_login, only: %i[ new create edit update destroy ]
 
   # GET /memes or /memes.json
   def index
@@ -67,7 +68,7 @@ class MemesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def meme_params
-      # TODO: use current logged in user
-      params.require(:meme).permit(:title, :image, :user_id)
+      # TODO: allow profile selection
+      params.require(:meme).permit(:title, :image).merge({:user_id => current_user.id})
     end
 end
