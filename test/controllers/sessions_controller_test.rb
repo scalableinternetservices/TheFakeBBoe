@@ -1,8 +1,23 @@
 require "test_helper"
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
-  test "should get new" do
-    get sessions_new_url
+  setup do
+    @user = users(:one)
+  end
+
+  test "should get login page" do
+    get login_url
     assert_response :success
+  end
+
+  test "should be able to log in" do
+    login_as @user, 'password'
+    assert_redirected_to root_url
+    assert_equal @user.id, session[:user_id]
+  end
+
+  test "should be denied login when password incorrect" do
+    login_as @user, "badpassword"
+    assert_response :unauthorized
   end
 end
