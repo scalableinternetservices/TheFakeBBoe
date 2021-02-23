@@ -1,11 +1,10 @@
 <strong> Messages (<%= @messages.count %>): </strong>
   <ul>
     <% @messages.each do |message| %>
-        <li><%= message.user_id %>:<%= message.content %></li>
+        <li><%= message.username %>:<%= message.content %></li>
     <% end %>
   </ul>
   <%= form_tag :action => 'writeMessage' do %>
-    <%= text_area :inputMessage, :username %>
     <%= text_area :inputMessage, :msg %>
     <%= submit_tag "Send" %>
   <% end %>

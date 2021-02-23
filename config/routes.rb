@@ -14,7 +14,6 @@ Rails.application.routes.draw do
   resources :conversations
   post '/conversations/:id/addUser', to: 'conversations#addUser', as: :conversation_add_user
   post '/conversations/:id/writeMessage', to: 'conversations#writeMessage', as: :conversation_write_message
-  post '/conversations/:id/createUser', to: 'conversations#createUser' # Debug route remove later
 
   resources :memes
 
