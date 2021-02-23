@@ -18,5 +18,6 @@ Rails.application.routes.draw do
   resources :memes
 
   resources :profiles
+  resources :matches
   post '/profiles/:id/addFriend', to: 'profiles#addFriend', as: :profile_add_friend
 end
