@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_23_052300) do
+ActiveRecord::Schema.define(version: 2021_02_23_062535) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,8 +95,10 @@ ActiveRecord::Schema.define(version: 2021_02_23_052300) do
     t.bigint "rival_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id"
     t.index ["follower_id"], name: "index_profiles_on_follower_id"
     t.index ["rival_id"], name: "index_profiles_on_rival_id"
+    t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
   create_table "user_feed_subscriptions", force: :cascade do |t|
