@@ -3,6 +3,10 @@ require "test_helper"
 class ProfilesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @profile = profiles(:one)
+
+    @user = users(:one)
+
+    login_as @user
   end
 
   test "should get index" do
@@ -24,21 +28,25 @@ class ProfilesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show profile" do
+    @user.profiles << @profile
     get profile_url(@profile)
     assert_response :success
   end
 
   test "should get edit" do
+    @user.profiles << @profile
     get edit_profile_url(@profile)
     assert_response :success
   end
 
   test "should update profile" do
+    @user.profiles << @profile
     patch profile_url(@profile), params: { profile: { name: @profile.name } }
     assert_redirected_to profile_url(@profile)
   end
 
   test "should destroy profile" do
+    @user.profiles << @profile
     assert_difference('Profile.count', -1) do
       delete profile_url(@profile)
     end
