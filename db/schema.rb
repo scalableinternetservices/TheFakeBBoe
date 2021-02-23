@@ -135,6 +135,7 @@ ActiveRecord::Schema.define(version: 2021_02_23_062535) do
   add_foreign_key "messages", "users"
   add_foreign_key "profiles", "profiles", column: "follower_id"
   add_foreign_key "profiles", "profiles", column: "rival_id"
+  add_foreign_key "profiles", "users"
   add_foreign_key "user_feed_subscriptions", "users", column: "subscribed_to_user_id"
   add_foreign_key "user_feed_subscriptions", "users", column: "subscriber_user_id"
 end
