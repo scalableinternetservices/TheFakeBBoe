@@ -1,9 +1,11 @@
 class ProfilesController < ApplicationController
   before_action :set_profile, only: %i[ show edit update destroy addFriend ]
+  before_action :require_login
+  before_action :check_user, only: %i[ show edit update destroy addFriend ]
 
   # GET /profiles or /profiles.json
   def index
-    @profiles = Profile.all
+    @profiles = current_user.profiles
   end
 
   # GET /profiles/1 or /profiles/1.json
@@ -23,9 +25,10 @@ class ProfilesController < ApplicationController
   # POST /profiles or /profiles.json
   def create
     @profile = Profile.new(profile_params)
-
+    @profile.user = current_user
     respond_to do |format|
       if @profile.save
+        
         format.html { redirect_to @profile, notice: "Profile was successfully created." }
         format.json { render :show, status: :created, location: @profile }
       else
@@ -90,5 +93,12 @@ class ProfilesController < ApplicationController
     def profile_params
       # TODO: use current logged in user
       params.require(:profile).permit(:name, :age, :location, :occupation, :bio)
+    end
+
+    def check_user
+      # Check that the current user owns the conversation. Otherwise redirect
+      if @profile.user != current_user
+        redirect_to profiles_url
+      end
     end
 end

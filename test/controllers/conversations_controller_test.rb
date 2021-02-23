@@ -3,6 +3,9 @@ require "test_helper"
 class ConversationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @conversation = conversations(:one)
+    @user = users(:one)
+
+    login_as @user
   end
 
   test "should get index" do
@@ -15,10 +18,31 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "user should not modify conversations that do not belong to them" do
+    get conversation_url(@conversation)
+    assert_redirected_to conversations_url
+
+    get edit_conversation_url(@conversation)
+    assert_redirected_to conversations_url
+
+    patch conversation_url(@conversation), params: { conversation: { name: @conversation.name } }
+    assert_redirected_to conversations_url
+
+    delete conversation_url(@conversation)
+    assert_redirected_to conversations_url
+
+    post conversation_add_user_path(@conversation), params: { addUserForm: { username: @user.username } }
+    assert_redirected_to conversations_url
+
+    post conversation_write_message_path(@conversation), params: { inputMessage: {  msg: "hello world" } }
+    assert_redirected_to conversations_url
+  end
+
   test "should add user to conversation" do
-    newuser = users(:one)
+    @conversation.users << @user
+    newUser = users(:two)
     conversations_count = @conversation.users.count
-    post conversation_add_user_path(@conversation), params: { addUserForm: { username: newuser.username } }
+    post conversation_add_user_path(@conversation), params: { addUserForm: { username: newUser.username } }
     assert_response :redirect
     assert @conversation.users.count == conversations_count + 1
     
@@ -32,27 +56,24 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should write a message to a conversation" do 
-    newuser = users(:one)
     conversations_count = @conversation.messages.count
-    @conversation.users << newuser
-    post conversation_write_message_path(@conversation), params: { inputMessage: { username: newuser.username, msg: "hello world" } }
+    @conversation.users << @user
+    post conversation_write_message_path(@conversation), params: { inputMessage: {  msg: "hello world" } }
     assert_response :redirect
     assert @conversation.messages.count == conversations_count + 1
   end 
 
   test "cannot write a blank message to a conversation" do 
-    newuser = users(:one)
     conversations_count = @conversation.messages.count
-    @conversation.users << newuser
-    post conversation_write_message_path(@conversation), params: { inputMessage: { username: newuser.username, msg: "" } }
+    @conversation.users << @user
+    post conversation_write_message_path(@conversation), params: { inputMessage: { msg: "" } }
     assert_response :redirect
     assert @conversation.messages.count == conversations_count
   end 
 
   test "should not write a message from user not in conversation" do 
-    newuser = users(:one)
     conversations_count = @conversation.messages.count
-    post conversation_write_message_path(@conversation), params: { inputMessage: { username: newuser.username, msg: "qwertyui" } }
+    post conversation_write_message_path(@conversation), params: { inputMessage: { msg: "qwertyui" } }
     assert_response :redirect
     assert @conversation.messages.count == conversations_count 
   end 
@@ -66,21 +87,25 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should show conversation" do
+    @conversation.users << @user
     get conversation_url(@conversation)
     assert_response :success
   end
 
   test "should get edit" do
+    @conversation.users << @user
     get edit_conversation_url(@conversation)
     assert_response :success
   end
 
   test "should update conversation" do
+    @conversation.users << @user
     patch conversation_url(@conversation), params: { conversation: { name: @conversation.name } }
     assert_redirected_to conversation_url(@conversation)
   end
 
   test "should destroy conversation" do
+    @conversation.users << @user
     assert_difference('Conversation.count', -1) do
       delete conversation_url(@conversation)
     end
