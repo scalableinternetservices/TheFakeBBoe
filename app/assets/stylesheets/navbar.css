@@ -1,0 +1,30 @@
+.navbar {
+    display: flex;
+    top: 0;
+    border-bottom: 3px solid lightgray;
+    padding: 0.5rem;
+}
+
+.navbar-appname {
+    align-self: flex-start;
+    font-size: 1.5rem;
+}
+
+.navbar-buttons {
+    align-self: flex-end;
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.navbar-buttons > ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-buttons > ul > li {
+    display: inline-block;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
