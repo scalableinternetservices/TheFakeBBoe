@@ -10,7 +10,7 @@ class ProfilesController < ApplicationController
 
   # GET /profiles/1 or /profiles/1.json
   def show
-    @friends = @profile.friends
+    @memes = @profile.memes
   end
 
   # GET /profiles/new
@@ -59,8 +59,6 @@ class ProfilesController < ApplicationController
       profileToAdd = Profile.find_by_name(nameToAdd)
       
       @profile.friends << profileToAdd.clone()
-      #raise profileToAdd.name + " " + @profile.friends[0].name + " " + @profile.friends[1].name + " " + @profile.friends[2].name + " " + @profile.friends[3].name + " " + @profile.friends[4].name + " " + @profile.friends[5].name + " " + @profile.friends[6].name + " " + @profile.friends[7].name + " " + @profile.friends[-1].name
-
 
       respond_to do |format|
         format.html { redirect_to @profile, notice: "Profile was successfully befriended" }

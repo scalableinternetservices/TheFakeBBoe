@@ -69,6 +69,6 @@ class MemesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def meme_params
       # TODO: allow profile selection
-      params.require(:meme).permit(:title, :image).merge({:user_id => current_user.id})
+      params.require(:meme).permit(:title, :image, :profile_id)
     end
 end

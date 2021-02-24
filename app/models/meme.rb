@@ -1,5 +1,5 @@
 class Meme < ApplicationRecord
-  belongs_to :user
+  belongs_to :profile
   validates :image, presence: true
 
   has_one_attached :image do |attachable|
