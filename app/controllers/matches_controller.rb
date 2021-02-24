@@ -29,12 +29,11 @@ class MatchesController < ApplicationController
 
     end
 
-    def show
-    end
-
     def matchSuccess 
-        if Conversation.exists?(id: params[:id])
+        if Conversation.exists?(id: params[:id]) and User.exists?(id: params[:user1_id]) and User.exists?(id: params[:user2_id])
             @conversation = Conversation.find(params[:id])
+            @user1 = User.find(params[:user1_id])
+            @user2 = User.find(params[:user2_id])
             respond_to do |format|
                 format.html { render :template => "matches/match_success" }
             end
@@ -57,35 +56,35 @@ class MatchesController < ApplicationController
             matchUser = User.find(matchUserId)
             # Create new conversation
             newConversation = Conversation.new(name: "#{current_user.username} + #{matchUser.username} 5ever UwU")
-            newConversation.save
-            newConversation.users << matchUser
-            newConversation.users << current_user
+            if newConversation.save
+                newConversation.users << matchUser
+                newConversation.users << current_user
 
-            respond_to do |format|
-                format.html { redirect_to match_success_path(id: newConversation.id) }
-                format.json { render :index, status: :ok }
+                respond_to do |format|
+                    format.html { redirect_to match_success_path(id: newConversation.id, user1_id: current_user.id, user2_id: matchUser.id) }
+                    format.json { render :index, status: :ok }
+                end
+            else
+                respond_to do |format|
+                    format.html { redirect_to matches_url, notice: "Error. Failed to create conversation" }
+                    format.json { render :index, status: :unprocessable_entity }
+                end
             end
 
         else
             # First, check if you already like them
             alreadyLiked = Match.where("liked = FALSE AND sender_id = :current_user_id", {current_user_id: current_user.id})
-            if alreadyLiked.count > 0
+            newMatch = Match.new( sender_id: current_user.id, receiver_id: matchUserId, liked: false )
+            if alreadyLiked.count > 0 or newMatch.save
                 respond_to do |format|
                     format.html { redirect_to matches_url, notice: "You've liked #{profileFound.name}" }
                     format.json { render :index, status: :ok }
                 end
             else
-                newMatch = Match.new( sender_id: current_user.id, receiver_id: matchUserId, liked: false )
-                if newMatch.save
-                    respond_to do |format|
-                        format.html { redirect_to matches_url, notice: "You've liked #{profileFound.name}" }
-                        format.json { render :index, status: :ok }
-                    end
-                else
-                    respond_to do |format|
-                        format.html { redirect_to matches_url, notice: "Database Error" }
-                        format.json { render :index, status: :unprocessable_entity }
-                    end
+               
+                respond_to do |format|
+                    format.html { redirect_to matches_url, notice: "Database Error" }
+                    format.json { render :index, status: :unprocessable_entity }
                 end
             end
             
