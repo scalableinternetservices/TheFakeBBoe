@@ -1,6 +1,7 @@
 class MemesController < ApplicationController
   before_action :set_meme, only: %i[ show edit update destroy ]
   before_action :require_login, only: %i[ new create edit update destroy ]
+  before_action :require_owner, only: %i[ edit update destroy ]
 
   # GET /memes or /memes.json
   def index
@@ -89,5 +90,12 @@ class MemesController < ApplicationController
     def meme_params
       # TODO: allow profile selection
       params.require(:meme).permit(:title, :image).merge({:user_id => current_user.id})
+    end
+
+    def require_owner
+      if @meme.user_id != current_user.id
+        flash.now[:error] = "You are not the creator of that meme."
+        render "errors/error_403", status: :forbidden and return
+      end
     end
 end
