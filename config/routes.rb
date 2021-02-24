@@ -22,6 +22,6 @@ Rails.application.routes.draw do
 
   get '/matches' => 'matches#index'
   post '/matches/likeProfile', to: 'matches#likeProfile', as: :matches_like_profile
-  get '/matches/matchSuccess' => 'matches#matchSuccess'
+  get '/matches/matchSuccess/:id', to: 'matches#matchSuccess', as: :match_success
   
 end

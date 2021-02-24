@@ -33,9 +33,13 @@ class MatchesController < ApplicationController
     end
 
     def matchSuccess 
-        p "Match success"
-        respond_to do |format|
-            format.html { render :template => "matches/match_success" }
+        if Conversation.exists?(id: params[:id])
+            @conversation = Conversation.find(params[:id])
+            respond_to do |format|
+                format.html { render :template => "matches/match_success" }
+            end
+        else
+            redirect_to matches_url
         end
     end
 
@@ -58,7 +62,7 @@ class MatchesController < ApplicationController
             newConversation.users << current_user
 
             respond_to do |format|
-                format.html { redirect_to match_success_url }
+                format.html { redirect_to match_success_path(id: newConversation.id) }
                 format.json { render :index, status: :ok }
             end
 
