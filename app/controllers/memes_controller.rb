@@ -7,6 +7,25 @@ class MemesController < ApplicationController
     @memes = Meme.all
   end
 
+  def browse_by_tag()
+    tag = params["tag"]
+    #p tag
+    #p !Tag.exists?(name: tag)
+    if (!Tag.exists?(name: tag))
+      render :json => {:error => "not-found"}.to_json, :status => 404
+      return
+    end
+    @memes = Meme.joins(:tags).where('tags.name' => tag).with_attached_image
+
+    if @memes.length == 0
+      render :json => {:error => "not-found"}.to_json, :status => 404
+      return  
+    end 
+
+
+
+  end
+
   # GET /memes/1 or /memes/1.json
   def show
   end

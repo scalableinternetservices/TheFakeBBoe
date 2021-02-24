@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Memes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @memes.each do |meme| %>
+      <tr>
+        <td><%= meme.title %></td>
+        <td><%= image_tag(meme.image) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Meme', new_meme_path %>
