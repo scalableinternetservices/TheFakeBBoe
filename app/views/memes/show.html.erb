@@ -9,6 +9,8 @@
         <%= link_to 'Destroy', @meme, method: :delete, data: { confirm: 'Are you sure?' } %> |
     <% end %>
     <%= link_to 'Back', memes_path %>
+    <br/>
+    <span>Tags: <%= @meme.tags.pluck(:name).join(", ") %></span>
 </div>
 <div>
     <%= image_tag @meme.image %>

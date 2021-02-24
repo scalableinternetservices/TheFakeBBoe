@@ -1,3 +1,5 @@
 class Tag < ApplicationRecord
-    has_and_belongs_to_many :memes, :join_table => :memes_tags
+  validates :name, presence: true, uniqueness: true
+  has_many :meme_tags
+  has_many :memes, through: :meme_tags
 end
