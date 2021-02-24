@@ -4,7 +4,7 @@ class UserFeedsController < ApplicationController
   # GET /user_feeds or /user_feeds.json
   def index
     subscribed_to_user_ids = UserFeedSubscription.where(subscriber_user: get_user_id_from_token).pluck(:subscribed_to_user_id)
-    @user_feeds = Meme.where("memes.user_id" => subscribed_to_user_ids).with_attached_image
+    @user_feeds = Meme.where("memes.profile_id" => subscribed_to_user_ids).with_attached_image
   end
 
     # GET /user_feeds/1 or /user_feeds/1.json
