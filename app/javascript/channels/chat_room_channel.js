@@ -13,15 +13,20 @@ const chatRoomChannel = consumer.subscriptions.create("ChatRoomChannel", {
   received(data) {
 
     if (data.message) {
-      let current_name = sessionStorage.getItem('chat_room_name')
-      let msg_class = data.sent_by === current_name ? "sent" : "received"
-      $('#messages').append(`<p class='${msg_class}'>` + data.message + '</p>')
+      let current_user = sessionStorage.getItem('user_id')
+      console.log("current_user", current_user)
+      let msg_class = data.username === current_user ? "sent" : "received"
+      if (msg_class === "sent")
+        $('#messages').append(`<p class='${msg_class}'>` + data.message + '</p>')
+      else
+        $('#messages').append(`<p class='${msg_class}'>` + data.username + ": " + data.message + '</p>')
+      
+      $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
     } 
   },
 
-  speak(message) {
-    let name = sessionStorage.getItem('chat_room_name')
-    this.perform('speak', { message, name })
+  speak(message, username) {
+    this.perform('speak', { message, username })
   }
 });
 

@@ -58,23 +58,20 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
   test "should write a message to a conversation" do 
     conversations_count = @conversation.messages.count
     @conversation.users << @user
-    post conversation_write_message_path(@conversation), params: { inputMessage: {  msg: "hello world" } }
-    assert_response :redirect
+    post conversation_write_message_path(@conversation), params: { data:"hello world" }
     assert @conversation.messages.count == conversations_count + 1
   end 
 
   test "cannot write a blank message to a conversation" do 
     conversations_count = @conversation.messages.count
     @conversation.users << @user
-    post conversation_write_message_path(@conversation), params: { inputMessage: { msg: "" } }
-    assert_response :redirect
+    post conversation_write_message_path(@conversation), params: { data: "" }
     assert @conversation.messages.count == conversations_count
   end 
 
   test "should not write a message from user not in conversation" do 
     conversations_count = @conversation.messages.count
-    post conversation_write_message_path(@conversation), params: { inputMessage: { msg: "qwertyui" } }
-    assert_response :redirect
+    post conversation_write_message_path(@conversation), params: { data: "" }
     assert @conversation.messages.count == conversations_count 
   end 
 

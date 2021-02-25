@@ -90,7 +90,6 @@ class ConversationsController < ApplicationController
 
 
   def writeMessage
-    p "PARAMS:", params
 
     content = params[:data]
     newMessage = Message.new(:content => content, :username => current_user.username)

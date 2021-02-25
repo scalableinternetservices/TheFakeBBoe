@@ -21,18 +21,14 @@ $(document).on('turbolinks:load', function () {
         
         e.preventDefault();
         let message = $('#message').val();
-        let conversation_id = $('#conversation_id').val();
+        let username = $('#username').val();
         console.log("Submit", message);
         if (message.length > 0) {
-            chatRoomChannel.speak(message);
+            chatRoomChannel.speak(message, username);
             $('#message').val('')
             var url = $('#send_message').attr('action');
 
             $.post(url, { data: message })
-            // $.ajax({
-            //     type: "POST",
-            //     url: "/conversations/" + conversation_id + "/writeMessage" 
-            // });
         }
     });
 })

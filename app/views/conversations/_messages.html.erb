@@ -2,7 +2,7 @@
   <div id="messages">
     <% @messages.each do |message| %>
         <%if message.user_id == current_user.id%>
-          <p class="sent"><%= message.username %>:<%= message.content %></p>
+          <p class="sent"><%= message.content %></p>
         <%else%>
           <p class="received"><%= message.username %>:<%= message.content %></p>
         <%end%>
@@ -11,5 +11,6 @@
 </div>
 <%= form_tag({:action => 'writeMessage'}, id: "send_message" ) do %>
   <%= text_field_tag :message %>
+  <%= hidden_field_tag "username", current_user.username %>
   <%= button_tag "Send" %>
 <% end %>
