@@ -1,10 +1,19 @@
-<strong> Messages (<%= @messages.count %>): </strong>
-  <ul>
+<div id="chatroom"> 
+  <div id="messages">
     <% @messages.each do |message| %>
-        <li><%= message.username %>:<%= message.content %></li>
+        <%if message.user_id == current_user.id%>
+          <p class="sent"><%= message.username %>:<%= message.content %></p>
+        <%else%>
+          <p class="received"><%= message.username %>:<%= message.content %></p>
+        <%end%>
     <% end %>
-  </ul>
-  <%= form_tag :action => 'writeMessage' do %>
+  </div>
+  <!--<%= form_tag :action => 'writeMessage' do %>
     <%= text_area :inputMessage, :msg %>
     <%= submit_tag "Send" %>
-  <% end %>
+  <% end %> -->
+</div>
+<form id="send_message">
+    <input type="text" id="message" name="message">
+    <button>Send</button>
+</form>
