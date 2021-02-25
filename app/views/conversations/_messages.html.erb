@@ -9,6 +9,11 @@
     <% end %>
   </div> 
 </div>
+
+<%= javascript_tag do %>
+  var userName = '<%= current_user.username %>';
+<% end %>
+
 <%= form_tag({:action => 'writeMessage'}, id: "send_message" ) do %>
   <%= text_field_tag :message %>
   <%= hidden_field_tag "username", current_user.username %>

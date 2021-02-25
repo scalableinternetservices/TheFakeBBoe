@@ -13,13 +13,12 @@ const chatRoomChannel = consumer.subscriptions.create("ChatRoomChannel", {
   received(data) {
 
     if (data.message) {
-      let current_user = sessionStorage.getItem('user_id')
-      console.log("current_user", current_user)
-      let msg_class = data.username === current_user ? "sent" : "received"
-      if (msg_class === "sent")
-        $('#messages').append(`<p class='${msg_class}'>` + data.message + '</p>')
-      else
-        $('#messages').append(`<p class='${msg_class}'>` + data.username + ": " + data.message + '</p>')
+      if (userName === data.username) {
+        $('#messages').append(`<p class='sent'>` + data.message + '</p>')
+      }
+      else {
+        $('#messages').append(`<p class='received'>` + data.username + ": " + data.message + '</p>')
+      }
       
       $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
     } 

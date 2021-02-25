@@ -22,7 +22,6 @@ $(document).on('turbolinks:load', function () {
         e.preventDefault();
         let message = $('#message').val();
         let username = $('#username').val();
-        console.log("Submit", message);
         if (message.length > 0) {
             chatRoomChannel.speak(message, username);
             $('#message').val('')
