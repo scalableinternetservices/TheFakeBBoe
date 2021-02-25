@@ -7,13 +7,9 @@
           <p class="received"><%= message.username %>:<%= message.content %></p>
         <%end%>
     <% end %>
-  </div>
-  <!--<%= form_tag :action => 'writeMessage' do %>
-    <%= text_area :inputMessage, :msg %>
-    <%= submit_tag "Send" %>
-  <% end %> -->
+  </div> 
 </div>
-<form id="send_message">
-    <input type="text" id="message" name="message">
-    <button>Send</button>
-</form>
+<%= form_tag({:action => 'writeMessage'}, id: "send_message" ) do %>
+  <%= text_field_tag :message %>
+  <%= button_tag "Send" %>
+<% end %>

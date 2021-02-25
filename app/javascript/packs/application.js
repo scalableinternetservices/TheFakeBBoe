@@ -12,3 +12,27 @@ require("jquery")
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
+
+
+import chatRoomChannel from "../channels/chat_room_channel";
+
+$(document).on('turbolinks:load', function () {
+    $("#send_message").on('submit', function (e) {
+        
+        e.preventDefault();
+        let message = $('#message').val();
+        let conversation_id = $('#conversation_id').val();
+        console.log("Submit", message);
+        if (message.length > 0) {
+            chatRoomChannel.speak(message);
+            $('#message').val('')
+            var url = $('#send_message').attr('action');
+
+            $.post(url, { data: message })
+            // $.ajax({
+            //     type: "POST",
+            //     url: "/conversations/" + conversation_id + "/writeMessage" 
+            // });
+        }
+    });
+})

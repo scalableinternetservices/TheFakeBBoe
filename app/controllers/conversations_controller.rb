@@ -90,34 +90,35 @@ class ConversationsController < ApplicationController
 
 
   def writeMessage
+    p "PARAMS:", params
 
-    content = params[:inputMessage][:msg]
+    content = params[:data]
     newMessage = Message.new(:content => content, :username => current_user.username)
 
     if not @conversation.users.include?(current_user) # contains userToAdd
       # User not authorized to add a message to this conversation
       @conversation.errors.add(:users, "User does not belong to conversation")
-      respond_to do |format|
-        format.html { redirect_to @conversation, notice: "User is not part of this conversation" }
-        format.json { render :show, status: :unprocessable_entity, location: @conversation }
-      end
+      # respond_to do |format|
+      #   format.html { redirect_to @conversation, notice: "User is not part of this conversation" }
+      #   format.json { render :show, status: :unprocessable_entity, location: @conversation }
+      # end
 
       return
     end
 
     newMessage.user_id = current_user.id
     newMessage.conversation_id = @conversation.id
-
-    respond_to do |format|
-      if newMessage.save             
-        format.html { redirect_to @conversation, notice: "Message written" }
-        format.json { render :show, status: :ok, location: @conversation }
-      else
-        @conversation.errors.add(:users, "Invalid message write")
-        format.html { redirect_to @conversation, notice: "Message not written" }
-        format.json { render :show, status: :unprocessable_entity, location: @conversation }
-      end
-    end
+    newMessage.save
+    # respond_to do |format|
+    #   if newMessage.save             
+    #     format.html { redirect_to @conversation, notice: "Message written" }
+    #     format.json { render :show, status: :ok, location: @conversation }
+    #   else
+    #     @conversation.errors.add(:users, "Invalid message write")
+    #     format.html { redirect_to @conversation, notice: "Message not written" }
+    #     format.json { render :show, status: :unprocessable_entity, location: @conversation }
+    #   end
+    # end
   
 
   end
