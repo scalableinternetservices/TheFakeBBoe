@@ -3,6 +3,7 @@ require 'test_helper'
 class MemesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @meme = memes(:one)
+    @profile = profiles(:one)
     @user = users(:one)
     cat_file = fixture_file_upload('cat.jpg', 'image/jpg')
     @meme.image.attach(cat_file)
@@ -23,7 +24,7 @@ class MemesControllerTest < ActionDispatch::IntegrationTest
     login_as @user
     assert_difference('Meme.count') do
       cat_file = fixture_file_upload('cat.jpg', 'image/jpg')
-      response = post memes_url, params: { meme: { title: 'my_meme', profile_id: profiles(:one), image: cat_file } }
+      response = post memes_url, params: { meme: { title: 'my_meme', profile_id: @profile.id, image: cat_file } }
     end
 
     assert_redirected_to meme_url(Meme.last)
@@ -49,7 +50,7 @@ class MemesControllerTest < ActionDispatch::IntegrationTest
   test 'should update meme as authorized user' do
     login_as @user
     dog_file = fixture_file_upload('dog.jpg', 'image/jpg')
-    patch meme_url(@meme), params: { meme: { title: 'dog_meme', profile_id: profiles(:one), image: dog_file } }
+    patch meme_url(@meme), params: { meme: { title: 'dog_meme', profile_id: @profile.id, image: dog_file } }
     assert_redirected_to meme_url(@meme)
     @meme.reload
     assert_equal 'dog_meme', @meme.title

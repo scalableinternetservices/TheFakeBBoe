@@ -5,7 +5,7 @@ one:
   profile_id: 'MyProfile1'
   title: My cat meme
 
-  # two:
-  #   id: 2
-  #   profile_id: 'MyProfile2'
-  #   title: My dog meme
+two:
+  id: 2
+  profile_id: 'MyProfile2'
+  title: My dog meme
