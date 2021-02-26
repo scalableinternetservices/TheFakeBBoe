@@ -66,6 +66,15 @@ ActiveRecord::Schema.define(version: 2021_02_24_073310) do
     t.index ["sender_id"], name: "index_matches_on_sender_id"
   end
 
+  create_table "meme_tags", id: false, force: :cascade do |t|
+    t.bigint "tag_id"
+    t.bigint "meme_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["meme_id"], name: "index_meme_tags_on_meme_id"
+    t.index ["tag_id"], name: "index_meme_tags_on_tag_id"
+  end
+
   create_table "memes", force: :cascade do |t|
     t.bigint "user_id"
     t.string "title"
@@ -99,6 +108,13 @@ ActiveRecord::Schema.define(version: 2021_02_24_073310) do
     t.index ["follower_id"], name: "index_profiles_on_follower_id"
     t.index ["rival_id"], name: "index_profiles_on_rival_id"
     t.index ["user_id"], name: "index_profiles_on_user_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "user_feed_subscriptions", force: :cascade do |t|
