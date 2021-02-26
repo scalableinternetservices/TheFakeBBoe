@@ -19,7 +19,6 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get tag browse" do
-    p @tag.name
     get "/memes/browse/#{@tag.name}"
     assert_response :success
   end

@@ -5,7 +5,7 @@ class MemesControllerTest < ActionDispatch::IntegrationTest
     @meme = memes(:one)
     @profile = profiles(:one)
     @user = users(:one)
-    @other_user= users(:two)
+    @other_user = users(:two)
     cat_file = fixture_file_upload('cat.jpg', 'image/jpg')
     @meme.image.attach(cat_file)
   end
@@ -25,7 +25,7 @@ class MemesControllerTest < ActionDispatch::IntegrationTest
     login_as @user
     assert_difference('Meme.count') do
       cat_file = fixture_file_upload('cat.jpg', 'image/jpg')
-      response = post memes_url, params: { meme: { title: 'my_meme', profile_id: @profile.id, image: cat_file } }
+      post memes_url, params: { meme: { title: 'my_meme', profile_id: @profile.id, image: cat_file } }
     end
 
     assert_redirected_to meme_url(Meme.last)

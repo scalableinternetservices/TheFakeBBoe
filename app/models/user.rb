@@ -15,4 +15,7 @@ class User < ApplicationRecord
   has_many :messages, dependent: :delete_all
 
   has_many :profiles, dependent: :delete_all
+
+  has_many :user_feed_subscriptions
+  has_many :feed_profiles, through: :user_feed_subscriptions, source: :profile
 end

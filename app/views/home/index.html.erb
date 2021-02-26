@@ -3,7 +3,10 @@
 <ul>
     <li><%= link_to 'Memes', controller: 'memes', action: 'index' %></li>
     <li><%= link_to 'Tags', controller: 'tags', action: 'index' %></li>
-    <li><%= link_to 'Profiles', controller: 'profiles', action: 'index' %></li>
-    <li><%= link_to 'Conversations', controller: 'conversations', action: 'index' %></li>
-    <li><%= link_to 'Let\'s get matchin\'', controller: 'matches', action: 'index' %></li>
+    <% if logged_in? %>
+        <li><%= link_to 'Your Feed', controller: 'user_feeds', action: 'index' %></li>
+        <li><%= link_to 'Profiles', controller: 'profiles', action: 'index' %></li>
+        <li><%= link_to 'Conversations', controller: 'conversations', action: 'index' %></li>
+        <li><%= link_to 'Let\'s get matchin\'', controller: 'matches', action: 'index' %></li>
+    <% end %>
 </ul>
