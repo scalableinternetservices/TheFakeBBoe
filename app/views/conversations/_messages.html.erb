@@ -1,4 +1,4 @@
-<div id="chatroom"> 
+<div id="chatroom" data-chatroom-id="<%= @conversation.id %>"> 
   <div id="messages">
     <% @messages.each do |message| %>
         <%if message.user_id == current_user.id%>
@@ -9,6 +9,8 @@
     <% end %>
   </div> 
 </div>
+
+<% #javascript_pack_tag 'conversation' %>
 
 <%= javascript_tag do %>
   var userName = '<%= current_user.username %>';

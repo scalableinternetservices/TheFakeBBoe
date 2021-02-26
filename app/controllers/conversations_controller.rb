@@ -94,7 +94,7 @@ class ConversationsController < ApplicationController
     content = params[:data]
     newMessage = Message.new(:content => content, :username => current_user.username)
 
-    if not @conversation.users.include?(current_user) # contains userToAdd
+    if not @conversation.users.include?(current_user) 
       # User not authorized to add a message to this conversation
       @conversation.errors.add(:users, "User does not belong to conversation")
       # respond_to do |format|
@@ -107,7 +107,9 @@ class ConversationsController < ApplicationController
 
     newMessage.user_id = current_user.id
     newMessage.conversation_id = @conversation.id
-    newMessage.save
+    if newMessage.save
+      ChatRoomChannel.broadcast_to @conversation, message: content, username: current_user.username
+    end
     # respond_to do |format|
     #   if newMessage.save             
     #     format.html { redirect_to @conversation, notice: "Message written" }
