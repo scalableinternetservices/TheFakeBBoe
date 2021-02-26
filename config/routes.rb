@@ -7,17 +7,21 @@ Rails.application.routes.draw do
   get    'signup'  => 'users#new'
   get    'login'   => 'sessions#new'
   post   'login'   => 'sessions#create'
-  get 'logout' => 'sessions#destroy'
+  get    'logout'  => 'sessions#destroy'
 
   resources :users
 
   resources :conversations
   post '/conversations/:id/addUser', to: 'conversations#addUser', as: :conversation_add_user
-  post '/conversations/:id/writeMessage', to: 'conversations#writeMessage', as: :conversation_write_message
+  post '/conversations/:id/writeMessage', to: 'conversations#writeMessage', as: :conversation_write_message 
 
   resources :memes
 
   resources :profiles
-  resources :matches
   post '/profiles/:id/addFriend', to: 'profiles#addFriend', as: :profile_add_friend
+
+  get '/matches' => 'matches#index'
+  post '/matches/likeProfile', to: 'matches#likeProfile', as: :matches_like_profile
+  get '/matches/matchSuccess/:id/:user1_id/:user2_id', to: 'matches#matchSuccess', as: :match_success
+  
 end

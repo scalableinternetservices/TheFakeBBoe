@@ -1,10 +1,29 @@
-<strong> Messages (<%= @messages.count %>): </strong>
-  <ul>
+<div id="chatroom" data-chatroom-id="<%= @conversation.id %>"> 
+  <div id="messages">
     <% @messages.each do |message| %>
-        <li><%= message.username %>:<%= message.content %></li>
+        <%if message.user_id == current_user.id%>
+          <p class="sent"><%= message.content %></p>
+        <%else%>
+          <p class="received"><%= message.username %>:<%= message.content %></p>
+        <%end%>
     <% end %>
-  </ul>
-  <%= form_tag :action => 'writeMessage' do %>
-    <%= text_area :inputMessage, :msg %>
-    <%= submit_tag "Send" %>
-  <% end %>
+  </div> 
+</div>
+
+
+<%= javascript_tag do %>
+  var userName = '<%= current_user.username %>';
+<% end %>
+
+<%= form_tag({:action => 'writeMessage'}, id: "send_message" ) do %>
+  <%= text_field_tag :message %>
+  <%= hidden_field_tag "username", current_user.username %>
+  <%= button_tag "Send" %>
+<% end %>
+<script> 
+  // Scroll to the bottom of the chat on load
+  var div = document.getElementById("messages");
+  div.scrollTop =  div.scrollHeight - div.clientHeight
+  // $("#messages").animate({ scrollTop:  div.scrollHeight - div.clientHeight }, 1000);
+  
+</script>

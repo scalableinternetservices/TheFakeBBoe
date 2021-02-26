@@ -8,6 +8,7 @@
             <p>Location: <%= profile.location %> </p>
             <p>Occupation: <%= profile.occupation %> </p>
             <p>Bio: <%= profile.bio %> </p>
+            <%= button_to "LOVE <4", action: "likeProfile",  data: { profile_id: profile.id }  %>
         </div>
         <br/>
         <br/>
