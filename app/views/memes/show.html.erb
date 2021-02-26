@@ -1,7 +1,17 @@
 <p id="notice"><%= notice %></p>
 
 <h1><%= @meme.title %></h1>
-<%= image_tag @meme.image %>
 
-<%= link_to 'Edit', edit_meme_path(@meme) %> |
-<%= link_to 'Back', memes_path %>
+<div>
+    <span>Created by <%= @meme.user.username %></span>
+    <% if logged_in? and @meme.user_id == current_user.id %>
+        <%= link_to 'Edit', edit_meme_path(@meme) %> |
+        <%= link_to 'Destroy', @meme, method: :delete, data: { confirm: 'Are you sure?' } %> |
+    <% end %>
+    <%= link_to 'Back', memes_path %>
+    <br/>
+    <span>Tags: <%= @meme.tags.pluck(:name).join(", ") %></span>
+</div>
+<div>
+    <%= image_tag @meme.image %>
+</div>

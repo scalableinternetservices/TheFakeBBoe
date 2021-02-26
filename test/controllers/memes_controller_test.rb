@@ -5,6 +5,7 @@ class MemesControllerTest < ActionDispatch::IntegrationTest
     @meme = memes(:one)
     @profile = profiles(:one)
     @user = users(:one)
+    @other_user= users(:two)
     cat_file = fixture_file_upload('cat.jpg', 'image/jpg')
     @meme.image.attach(cat_file)
   end
@@ -47,7 +48,13 @@ class MemesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should update meme as authorized user' do
+  test "should not update meme as unauthorized user" do
+    login_as @other_user
+    patch meme_url(@meme), params: { meme: { title: 'dog_meme' } }
+    assert_response :forbidden
+  end
+
+  test "should update meme as authorized user" do
     login_as @user
     dog_file = fixture_file_upload('dog.jpg', 'image/jpg')
     patch meme_url(@meme), params: { meme: { title: 'dog_meme', profile_id: @profile.id, image: dog_file } }
@@ -56,7 +63,13 @@ class MemesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'dog_meme', @meme.title
   end
 
-  test 'should destroy meme as authorized user' do
+  test "should not destroy meme as unauthorized user" do
+    login_as @other_user
+    delete meme_url(@meme)
+    assert_response :forbidden
+  end
+
+  test "should destroy meme as authorized user" do
     login_as @user
     assert_difference('Meme.count', -1) do
       delete meme_url(@meme)

@@ -20,6 +20,9 @@
   <%= form.label :image, "File" %>
   <%= form.file_field :image %>
 
+  <%= form.label :tag_field, "Tags" %>
+  <%= form.text_field :tag_field, value: meme.tags.map {|t| t.name}.join(",") %>
+
   <div class="actions">
     <%= form.submit %>
   </div>

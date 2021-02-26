@@ -1,5 +1,8 @@
 class Meme < ApplicationRecord
   belongs_to :profile
+  delegate :user, to: :profile
+  has_many :meme_tags
+  has_many :tags, through: :meme_tags
   validates :image, presence: true
 
   has_one_attached :image do |attachable|
