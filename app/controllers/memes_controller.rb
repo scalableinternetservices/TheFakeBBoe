@@ -101,7 +101,7 @@ class MemesController < ApplicationController
       meme_p = params.require(:meme)
                  .permit(:title, :image).except(:tag_field)
                  .merge({:user_id => current_user.id})
-      tag_p = params.require(:meme).permit(:tag_field).fetch(:tag_field)
+      tag_p = params.require(:meme).permit(:tag_field).fetch(:tag_field, '')
                 .split(/\s*,\s*/)
                 .map { |s| s.strip }
                 .filter { |s| !s.empty? }

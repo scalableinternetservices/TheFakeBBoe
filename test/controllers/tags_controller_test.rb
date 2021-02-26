@@ -2,7 +2,10 @@ require "test_helper"
 
 class TagsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @tag = tags(:one)
+    @meme = memes(:one)
+    cat_file = fixture_file_upload('cat.jpg', 'image/jpg')
+    @meme.image.attach(cat_file)
+    @tag = tags(:cat)
   end
 
   test "should get index" do
@@ -10,39 +13,14 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get new" do
-    get new_tag_url
-    assert_response :success
-  end
-
-  test "should create tag" do
-    assert_difference('Tag.count') do
-      post tags_url, params: { tag: {  } }
-    end
-
-    assert_redirected_to tag_url(Tag.last)
-  end
-
   test "should show tag" do
     get tag_url(@tag)
     assert_response :success
   end
 
-  test "should get edit" do
-    get edit_tag_url(@tag)
+  test "should get tag browse" do
+    p @tag.name
+    get "/memes/browse/#{@tag.name}"
     assert_response :success
-  end
-
-  test "should update tag" do
-    patch tag_url(@tag), params: { tag: {  } }
-    assert_redirected_to tag_url(@tag)
-  end
-
-  test "should destroy tag" do
-    assert_difference('Tag.count', -1) do
-      delete tag_url(@tag)
-    end
-
-    assert_redirected_to tags_url
   end
 end
