@@ -97,12 +97,8 @@ class ConversationsController < ApplicationController
     if not @conversation.users.include?(current_user) 
       # User not authorized to add a message to this conversation
       @conversation.errors.add(:users, "User does not belong to conversation")
-      # respond_to do |format|
-      #   format.html { redirect_to @conversation, notice: "User is not part of this conversation" }
-      #   format.json { render :show, status: :unprocessable_entity, location: @conversation }
-      # end
-
       return
+      
     end
 
     newMessage.user_id = current_user.id
@@ -110,18 +106,7 @@ class ConversationsController < ApplicationController
     if newMessage.save
       ChatRoomChannel.broadcast_to @conversation, message: content, username: current_user.username
     end
-    # respond_to do |format|
-    #   if newMessage.save             
-    #     format.html { redirect_to @conversation, notice: "Message written" }
-    #     format.json { render :show, status: :ok, location: @conversation }
-    #   else
-    #     @conversation.errors.add(:users, "Invalid message write")
-    #     format.html { redirect_to @conversation, notice: "Message not written" }
-    #     format.json { render :show, status: :unprocessable_entity, location: @conversation }
-    #   end
-    # end
-  
-
+    
   end
 
   private
