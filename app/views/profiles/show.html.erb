@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name: </strong><%= @profile.name %><span> (<%= @profile.age %>)</span>
+  <strong>Name: </strong><%= @profile.name %><span> (Age: <%= @profile.age %>)</span>
 </p>
 <p>
   Lives in <i><%= @profile.location %><i>
@@ -15,10 +15,10 @@
 
 <br/>
 
-<strong>Friends: </strong>
+<strong>Memes: </strong>
 <ul>
-<% @friends.each do |friend| %>
-  <li><%= friend.name %></li>
+<% @memes.each do |meme| %>
+  <li><%= meme.title %></li>
 <% end %>
 </ul>
 

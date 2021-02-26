@@ -76,11 +76,11 @@ ActiveRecord::Schema.define(version: 2021_02_24_073310) do
   end
 
   create_table "memes", force: :cascade do |t|
-    t.bigint "user_id"
     t.string "title"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_memes_on_user_id"
+    t.bigint "profile_id"
+    t.index ["profile_id"], name: "index_memes_on_profile_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -105,7 +105,9 @@ ActiveRecord::Schema.define(version: 2021_02_24_073310) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id"
+    t.bigint "memes_id"
     t.index ["follower_id"], name: "index_profiles_on_follower_id"
+    t.index ["memes_id"], name: "index_profiles_on_memes_id"
     t.index ["rival_id"], name: "index_profiles_on_rival_id"
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
@@ -146,9 +148,10 @@ ActiveRecord::Schema.define(version: 2021_02_24_073310) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "matches", "users", column: "receiver_id"
   add_foreign_key "matches", "users", column: "sender_id"
-  add_foreign_key "memes", "users"
+  add_foreign_key "memes", "profiles"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users"
+  add_foreign_key "profiles", "memes", column: "memes_id"
   add_foreign_key "profiles", "profiles", column: "follower_id"
   add_foreign_key "profiles", "profiles", column: "rival_id"
   add_foreign_key "profiles", "users"

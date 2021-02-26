@@ -11,6 +11,9 @@
     </div>
   <% end %>
 
+  <%= form.label :profile_id, "Profile" %>
+  <%= form.collection_select :profile_id, Profile.order(:name), :id, :name, include_blank: false, prompt: true %>
+
   <%= form.label :title, "Title" %>
   <%= form.text_field :title %>
 

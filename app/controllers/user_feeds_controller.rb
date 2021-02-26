@@ -1,10 +1,11 @@
 class UserFeedsController < ApplicationController
   #before_action :set_user_feed, only: %i[ show edit update destroy ]
+  before_action :require_login
 
   # GET /user_feeds or /user_feeds.json
   def index
     subscribed_to_user_ids = UserFeedSubscription.where(subscriber_user: current_user.id).pluck(:subscribed_to_user_id)
-    @user_feeds = Meme.where("memes.user_id" => subscribed_to_user_ids).with_attached_image
+    @user_feeds = Meme.where("memes.profile_id" => subscribed_to_user_ids).with_attached_image
   end
 
     # GET /user_feeds/1 or /user_feeds/1.json

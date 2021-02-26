@@ -99,8 +99,7 @@ class MemesController < ApplicationController
     def meme_params
       # TODO: allow profile selection
       meme_p = params.require(:meme)
-                 .permit(:title, :image).except(:tag_field)
-                 .merge({:user_id => current_user.id})
+                 .permit(:title, :image, :profile_id).except(:tag_field)
       tag_p = params.require(:meme).permit(:tag_field).fetch(:tag_field, '')
                 .split(/\s*,\s*/)
                 .map { |s| s.strip }
@@ -122,7 +121,7 @@ class MemesController < ApplicationController
     end
 
     def require_owner
-      if @meme.user_id != current_user.id
+      if @meme.user.id != current_user.id
         flash.now[:error] = "You are not the creator of that meme."
         render "errors/error_403", status: :forbidden and return
       end
