@@ -1,7 +1,10 @@
 <p id="notice"><%= notice %></p>
 
-<h1>User Feeds</h1>
+<h1>Your Feed</h1>
 
+<p>
+    Memes of profiles you've subscribed to will appear here.
+</p>
 <table>
   <thead>
     <tr>
@@ -10,12 +13,9 @@
   </thead>
 
   <tbody>
-    <% @user_feeds.each do |user_feed| %>
+    <% @feed_memes.each do |meme| %>
       <tr>
-      <td><%= image_tag(user_feed.image) %></td>
-        <td><%#= link_to 'Show', user_feed %></td>
-        <td><%#= link_to 'Edit', edit_user_feed_path(user_feed) %></td>
-        <td><%#= link_to 'Destroy', user_feed, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><span><%= meme.title %></span><%= image_tag meme.image %></td>
       </tr>
     <% end %>
   </tbody>

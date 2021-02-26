@@ -8,7 +8,10 @@
 
 user1 = User.create!(username:"abc",password:"12345678", email: "abc@gmail.com")
 user2 = User.create!(username:"def",password:"12345678", email:"bcd@gmail.com")
-feed = UserFeedSubscription.create!(subscriber_user: user1, subscribed_to_user: user2)
+user3 = User.create!(username:"user",password:"password", email:"user@example.com")
+
+profile1 = Profile.create!(user: user1)
+feed = UserFeedSubscription.create!(user: user3, profile: profile1)
 
 tag1 = Tag.create!(name: "Funny")
 tag2 = Tag.create!(name: "WTF")

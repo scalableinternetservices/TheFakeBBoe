@@ -4,11 +4,9 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: 
-# column: value
-#
-  id : 1
-  subscriber_user_id: 1
-  subscribed_to_user_id: 2
-#two: 
-# column: value
+
+# user one subscribed to profile 2
+one:
+  user_id: 1
+  profile_id: 2
+
