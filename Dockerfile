@@ -5,7 +5,7 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add \
   && apt-get update && apt-get install -y nodejs yarn --no-install-recommends \
   && gem install bundler \
   && gem install rails \
-  && yarn add jquery
+  && yarn install
 
 
 WORKDIR /app
