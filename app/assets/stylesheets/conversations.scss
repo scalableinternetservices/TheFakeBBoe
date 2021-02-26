@@ -1,3 +1,65 @@
 // Place all the styles related to the conversations controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
+
+#chatroom {
+  height: 50vh;
+  overflow: auto;
+
+  >div {
+    width: 80%;
+    margin: auto;
+    border-radius: 5px;
+    overflow: auto;
+    position: relative;
+
+  }
+}
+#messages {
+  color: white;
+  height: 90%;
+  width: 95%;
+  margin: 14px auto;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+
+  p {
+    display: inline-block;
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    max-width: 70%;
+    width: max-content;
+  }
+}
+    
+.received {
+  background-color: chocolate;
+  border-bottom-right-radius: 10px;
+}
+.sent {
+  border-bottom-left-radius: 10px;
+  align-self: flex-end;
+  background-color: darkred;
+}
+
+form#send_message {
+  width: 95%;
+  margin: auto;
+
+  input {
+    height: 30px;
+    width: 80%;
+    border-radius: 10px;
+  }
+
+  button {
+    height: 35px;
+    width: 8.8%;
+    border-radius: 20px;
+    border: 0;
+  }
+}
