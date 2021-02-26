@@ -19,7 +19,6 @@ $(document).on('turbolinks:load', function () {
     $("#send_message").on('submit', function (e) {
         e.preventDefault();
         let message = $('#message').val();
-        console.log("submit message", message);
         if (message.length > 0) {
             var url = $('#send_message').attr('action');
             $.post(url, { data: message })
@@ -29,8 +28,8 @@ $(document).on('turbolinks:load', function () {
 })
 
 $(document).on('turbolinks:load', function () {
-    console.log("Load")
     if (this.subscription) {
+        consumer.subscriptions.remove(this.subscription)
         consumer.disconnect();
         this.subscription = null;
     }
@@ -42,16 +41,15 @@ $(document).on('turbolinks:load', function () {
         }, {
             connected() {
                 // Called when the subscription is ready for use on the server
-                console.log("Connected to the chat room")
+                // console.log("Connected to the chat room")
             },
 
             disconnected() {
                 // Called when the subscription has been terminated by the server
-                console.log("Disconnected from chatroom")
+                // console.log("Disconnected from chatroom")
             },
 
             received(data) {
-                console.log("Received data")
                 if (data.message) {
                     if (userName === data.username) {
                         $('#messages').append(`<p class='sent'>` + data.message + '</p>')
