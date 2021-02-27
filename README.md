@@ -1,3 +1,63 @@
+
+## Deploy to beanstalk
+```
+ssh -i TheFakeBBoe.pem TheFakeBBoe@ec2.cs291.com
+```
+
+```
+cd TheFakeBBoe
+git pull origin main
+eb init --keyname $(whoami) \
+  --platform "64bit Amazon Linux 2 v3.2.2 running Ruby 2.7" \
+  --region us-west-2 TheFakeBBoe
+```
+
+```
+eb create --envvars SECRET_KEY_BASE=BADSECRET \
+  -db.engine postgres -db.i db.t3.micro -db.user u \
+  -i t3.micro --single INSERT_SOME_NAME_HERE
+```
+
+After 10-20 minutes, it will finish. Run:
+```
+eb status INSERT_SOME_NAME_HERE
+```
+The status should be `Green` and the url is next to the `CNAME`.
+
+## Load Testing
+
+First, ssh into the ec2 instance
+
+In the root folder, there should be this file: `TheFakeBBoe_web_credentials.txt`. It has the url, username, and password to login to the AWS console. 
+
+Then, run this:
+
+```
+launch_tsung.sh
+```
+
+You will then see something like: `ssh ec2-user@SOMETHINGHERE`
+Give it a few seconds before trying it. If you ssh immediately after it shows up, you will get a connection timeout.
+SSH into the tsung instance to start load testing. 
+
+## Run tsung_load tests
+
+There is an example load test `tsung_example.xml`. Modify the file or write a new one and make sure you change the server tag to be the deployed instance.
+
+Run
+```
+tsung -f tsung_example.xml -k start
+```
+
+It takes a while to run. You will know when it is done because you will see: `All slaves have stopped; keep controller and web dashboard alive. 
+Hit CTRL-C or click Stop on the dashboard to stop.`
+
+# View Tsung Logs
+
+Log into the AWS console with TheFakeBBoe credentials and view all the EC2 instances. Make sure that the AWS region is set to Oregon (in the top right corner).
+One of the instances will be `tsung-TheFakeBBoe` (or multiple of them if we are all running load tests at the same time). Figure out which one is yours, then click on the Instance ID. Copy-paste the public IPv4 address into the browser to view all the stats.
+
+
 # README
 
 This README would normally document whatever steps are necessary to get the
@@ -22,6 +82,8 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+
 
 ## Setting up the development environment
 
@@ -112,3 +174,6 @@ app_development=# select * from users;
 (1 row)
 
 ```
+
+
+
