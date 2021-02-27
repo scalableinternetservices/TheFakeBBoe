@@ -52,10 +52,15 @@ $(document).on('turbolinks:load', function () {
             received(data) {
                 if (data.message) {
                     if (userName === data.username) {
-                        $('#messages').append(`<p class='sent'>` + data.message + '</p>')
+                        $('#messages').append(`<div class='message sent'>` + data.message + '</div>')
+                        lastUsername = data.username;
                     }
                     else {
-                        $('#messages').append(`<p class='received'>` + data.username + ": " + data.message + '</p>')
+                        if (lastUsername !== data.username) {
+                            $('#messages').append(`<div class='userlabel'>` + data.username + ':</div>')
+                            lastUsername = data.username;
+                        }
+                        $('#messages').append(`<div class='message received'>` + data.message + '</div>')
                     }
 
                     $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
