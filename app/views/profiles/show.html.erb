@@ -16,11 +16,16 @@
 <br/>
 
 <strong>Memes: </strong>
-<ul>
+<div class='image-list'>
 <% @memes.each do |meme| %>
-  <li><%= meme.title %></li>
+  <div>
+    <p  class='meme-label'><%= meme.title %></p>
+  <%=link_to meme do %>
+    <%= image_tag meme.image, :class=>'meme-thumbnail'%>
+  <% end %>
+  </div>
 <% end %>
-</ul>
+</div>
 
 <br/>
 
