@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
       user_count = 0
       while user_count < 3 do
         connected_user = User.find(counter)
-        Profile.create!(user: connected_user, name: "Rick", age: 21, occupation: "job", location: "place", bio: "hi")
+        Profile.create!(user: connected_user, name: "Rick_#{counter}_#{user_count}", age: 21, occupation: "job", location: "place", bio: "hi")
         user_count += 1
       end
       counter += 1
