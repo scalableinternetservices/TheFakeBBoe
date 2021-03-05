@@ -1,29 +1,47 @@
 <div id="chatroom" data-chatroom-id="<%= @conversation.id %>"> 
   <div id="messages">
+    <% @lastSenderId = nil %>
+    <% @lastSenderName = nil %>
+    <div class="statuslabel">
+      This is the start of your message history.
+    </div>
     <% @messages.each do |message| %>
-        <%if message.user_id == current_user.id%>
-          <p class="sent"><%= message.content %></p>
-        <%else%>
-          <p class="received"><%= message.username %>:<%= message.content %></p>
-        <%end%>
+      <%if (message.user_id != @lastSenderId) && (message.user_id != current_user.id)%>
+        <div class="userlabel">
+          <%= message.username %>:
+        </div>
+      <%end%>
+      <%if message.user_id == current_user.id%>
+        <div class="message sent">
+          <%= message.content %>
+        </div>
+      <%else%>
+        <div class="message received">
+          <%= message.content %>
+        </div>
+      <%end%>
+      <% @lastSenderId = message.user_id %>
+      <% @lastSenderName = message.username %>
+    <% end %>
+    <%= javascript_tag do %>
+      var lastUsername = '<%= @lastSenderName %>';
     <% end %>
   </div> 
+
+  <%= javascript_tag do %>
+    var userName = '<%= current_user.username %>';
+  <% end %>
+
+  <%= form_tag({:action => 'writeMessage'}, id: "send_message" ) do %>
+    <%= text_field_tag :message %>
+    <%= hidden_field_tag "username", current_user.username %>
+    <%= button_tag "Send" %>
+  <% end %>
 </div>
 
-
-<%= javascript_tag do %>
-  var userName = '<%= current_user.username %>';
-<% end %>
-
-<%= form_tag({:action => 'writeMessage'}, id: "send_message" ) do %>
-  <%= text_field_tag :message %>
-  <%= hidden_field_tag "username", current_user.username %>
-  <%= button_tag "Send" %>
-<% end %>
 <script> 
   // Scroll to the bottom of the chat on load
   var div = document.getElementById("messages");
   div.scrollTop =  div.scrollHeight - div.clientHeight
   // $("#messages").animate({ scrollTop:  div.scrollHeight - div.clientHeight }, 1000);
-  
 </script>

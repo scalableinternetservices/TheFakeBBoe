@@ -13,5 +13,5 @@
     <span>Tags: <%= @meme.tags.pluck(:name).join(", ") %></span>
 </div>
 <div>
-    <%= image_tag @meme.image %>
+  <%= image_tag @meme.image, :class=>'meme' %>
 </div>

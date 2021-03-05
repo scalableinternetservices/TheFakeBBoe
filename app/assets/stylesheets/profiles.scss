@@ -1,3 +1,15 @@
 // Place all the styles related to the Profiles controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
+
+img.meme-thumbnail {
+  width: 10rem;
+  height: 10rem;
+  margin-right: 1rem;
+  object-fit: cover;
+}
+.image-list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
