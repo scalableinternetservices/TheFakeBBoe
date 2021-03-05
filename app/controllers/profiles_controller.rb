@@ -1,7 +1,7 @@
 class ProfilesController < ApplicationController
   before_action :set_profile, only: %i[show edit update destroy addFriend]
   before_action :require_login
-  #before_action :check_user, only: %i[show edit update destroy addFriend]
+  # before_action :check_user, only: %i[show edit update destroy addFriend]
 
   # GET /profiles or /profiles.json
   def index
@@ -93,7 +93,7 @@ class ProfilesController < ApplicationController
     params.require(:profile).permit(:name, :age, :location, :occupation, :bio)
   end
 
-  #def check_user
+  # def check_user
   #  redirect_to profiles_url if @profile.user != current_user
-  #end
+  # end
 end
