@@ -2,6 +2,7 @@ class ConversationsController < ApplicationController
   before_action :set_conversation, only: %i[ show edit update destroy addUser writeMessage ]
   before_action :require_login
   before_action :check_user, only: %i[ show edit update destroy addUser writeMessage ]
+  skip_before_action :verify_authenticity_token
 
   # GET /conversations or /conversations.json
   def index
