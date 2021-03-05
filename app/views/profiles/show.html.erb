@@ -16,20 +16,27 @@
 <br/>
 
 <strong>Memes: </strong>
-<ul>
+<div class='image-list'>
 <% @memes.each do |meme| %>
-  <li><%= meme.title %></li>
+  <div>
+    <p  class='meme-label'><%= meme.title %></p>
+  <%=link_to meme do %>
+    <%= image_tag meme.image, :class=>'meme-thumbnail'%>
+  <% end %>
+  </div>
 <% end %>
-</ul>
+</div>
 
 <br/>
 
-<%= form_tag :action => 'addFriend' do %>
-<%= text_area :addFriendForm, :name %>
-<%= submit_tag "Add Friend" %>
-<% end %>
+<!--
+< %= form_tag :action => 'addFriend' do % >
+< %= text_area :addFriendForm, :name % >
+< %= submit_tag "Add Friend" % >
+< % end % >
+-->
 
-<!-- TODO: add attributes 
+<!-- TODO: add attributes
 
   t.references :follower, foreign_key: { to_table: :profiles }
   t.references :rival, foreign_key: { to_table: :profiles }
