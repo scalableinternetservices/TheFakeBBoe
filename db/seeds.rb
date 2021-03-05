@@ -5,6 +5,25 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+require 'csv'
+
+userscsv_text = File.read(Rails.root.join('lib', 'seeds', 'users.csv'))
+csv = CSV.parse(userscsv_text, :headers => true, :encoding => 'ISO-8859-1')
+csv.each do |row|
+    new_user = User.create!(username: row['username'], password: row['password'], email: row['email'])
+    puts new_user.id
+end
+puts "Finished users"
+profiles_csv_text = File.read(Rails.root.join('lib', 'seeds', 'profiles.csv'))
+p_csv = CSV.parse(profiles_csv_text, :headers => true, :encoding => 'ISO-8859-1')
+p_csv.each do |row|
+    puts "USERID", row['name']
+    connected_user = User.find(row['user_id'])
+
+    puts connected_user
+    new_profile = Profile.create!(user: connected_user, name: row['name'], age: 21, occupation: "job", location: "place", bio: "hi")
+    puts new_profile
+end
 
 user1 = User.create!(username: 'abc', password: '12345678', email: 'abc@gmail.com')
 user2 = User.create!(username: 'def', password: '12345678', email: 'bcd@gmail.com')
