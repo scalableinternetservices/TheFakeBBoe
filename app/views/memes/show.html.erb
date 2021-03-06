@@ -3,7 +3,7 @@
 <h1><%= @meme.title %></h1>
 
 <div>
-    <span>Created by <%= @meme.user.username %></span>
+    <span>Created by <%= @meme.profile.name %> (<%= @meme.user.username %>)</span>
     <% if logged_in? and @meme.user.id == current_user.id %>
         <%= link_to 'Edit', edit_meme_path(@meme) %> |
         <%= link_to 'Destroy', @meme, method: :delete, data: { confirm: 'Are you sure?' } %> |
@@ -13,5 +13,9 @@
     <span>Tags: <%= @meme.tags.pluck(:name).join(", ") %></span>
 </div>
 <div>
-  <%= image_tag @meme.image, :class=>'meme' %>
+    <% if @meme.image.persisted? %>
+        <%= image_tag @meme.image, :class=>'meme' %>
+    <% else %>
+        <span>Image not found</span>
+    <% end %>
 </div>

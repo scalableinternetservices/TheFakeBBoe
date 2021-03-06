@@ -13,7 +13,13 @@
     <% @memes.each do |meme| %>
       <tr>
         <td><%= meme.title %></td>
-        <td><%= image_tag(meme.image) %></td>
+        <td>
+            <% if meme.image.persisted? %>
+                <%= image_tag(meme.image) %>
+            <% else %>
+                <span>Image not found</span>
+            <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>
