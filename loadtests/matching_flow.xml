@@ -8,15 +8,15 @@
 
   <!-- Server side setup -->
   <servers>
-    <server host="danielshu.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
+    <server host="danielshu3.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
   </servers>
 
 
   <load>
-    <arrivalphase phase="1" duration="2" unit="second">
+    <arrivalphase phase="1" duration="10" unit="second">
       <users arrivalrate="1" unit="second"></users>
     </arrivalphase>
-    <!--<arrivalphase phase="2" duration="10" unit="second">
+    <arrivalphase phase="2" duration="10" unit="second">
       <users arrivalrate="2" unit="second"></users>
     </arrivalphase>
     <arrivalphase phase="3" duration="10" unit="second">
@@ -37,9 +37,7 @@
     <arrivalphase phase="8" duration="10" unit="second">
       <users arrivalrate="1024" unit="second"></users>
     </arrivalphase>
-    <arrivalphase phase="9" duration="10" unit="second">
-      <users arrivalrate="2048" unit="second"></users>
-    </arrivalphase> -->
+
   </load>
 
   <options>
