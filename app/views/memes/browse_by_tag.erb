@@ -12,8 +12,7 @@
   <tbody>
     <% @memes.each do |meme| %>
       <tr>
-        <td><%= meme.title %></td>
-        <td><%= image_tag(meme.image) %></td>
+        <td><%= link_to meme.title, meme.image %></td>
       </tr>
     <% end %>
   </tbody>

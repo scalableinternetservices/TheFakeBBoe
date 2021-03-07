@@ -4,8 +4,10 @@ one:
   id: 1
   profile_id: 1
   title: My cat meme
+  image: https://images.hindustantimes.com/rf/image_size_630x354/HT/p2/2020/10/26/Pictures/_1b8238d2-1749-11eb-8018-0bdbc3b69c17.jpg
 
 two:
   id: 2
   profile_id: 2
   title: My dog meme
+  image: https://www.todaysparent.com/wp-content/uploads/2017/06/when-your-kid-becomes-a-meme.jpg

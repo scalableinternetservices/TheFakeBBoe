@@ -4,9 +4,9 @@ class ProfilesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @profile = profiles(:one)
     @user = users(:one)
-    cat_file = fixture_file_upload('cat.jpg', 'image/jpg')
+    # cat_file = fixture_file_upload('cat.jpg', 'image/jpg')
+    # @meme.image.attach(cat_file)
     @meme = memes(:one)
-    @meme.image.attach(cat_file)
     login_as @user
   end
 

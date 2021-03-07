@@ -6,8 +6,8 @@ class MemesControllerTest < ActionDispatch::IntegrationTest
     @profile = profiles(:one)
     @user = users(:one)
     @other_user = users(:two)
-    cat_file = fixture_file_upload('cat.jpg', 'image/jpg')
-    @meme.image.attach(cat_file)
+    # cat_file = fixture_file_upload('cat.jpg', 'image/jpg')
+    # @meme.image.attach(cat_file)
   end
 
   test 'should get index' do
@@ -24,8 +24,8 @@ class MemesControllerTest < ActionDispatch::IntegrationTest
   test 'should create meme as authorized user' do
     login_as @user
     assert_difference('Meme.count') do
-      cat_file = fixture_file_upload('cat.jpg', 'image/jpg')
-      post memes_url, params: { meme: { title: 'my_meme', profile_id: @profile.id, image: cat_file } }
+      # cat_file = fixture_file_upload('cat.jpg', 'image/jpg')
+      post memes_url, params: { meme: { title: 'my_meme', profile_id: @profile.id, image: 'https://example.com' } }
     end
 
     assert_redirected_to meme_url(Meme.last)
@@ -34,7 +34,7 @@ class MemesControllerTest < ActionDispatch::IntegrationTest
   test 'should fail to create meme when no file is provided' do
     login_as @user
     post memes_url, params: { meme: { title: 'my_meme' } }
-    assert_response :unprocessable_entity
+    assert_response :forbidden
   end
 
   test 'should show meme' do
@@ -48,28 +48,28 @@ class MemesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should not update meme as unauthorized user" do
+  test 'should not update meme as unauthorized user' do
     login_as @other_user
     patch meme_url(@meme), params: { meme: { title: 'dog_meme' } }
     assert_response :forbidden
   end
 
-  test "should update meme as authorized user" do
+  test 'should update meme as authorized user' do
     login_as @user
-    dog_file = fixture_file_upload('dog.jpg', 'image/jpg')
-    patch meme_url(@meme), params: { meme: { title: 'dog_meme', profile_id: @profile.id, image: dog_file } }
+    # dog_file = fixture_file_upload('dog.jpg', 'image/jpg')
+    patch meme_url(@meme), params: { meme: { title: 'dog_meme', profile_id: @profile.id, image: 'https://example_upload.com' } }
     assert_redirected_to meme_url(@meme)
     @meme.reload
     assert_equal 'dog_meme', @meme.title
   end
 
-  test "should not destroy meme as unauthorized user" do
+  test 'should not destroy meme as unauthorized user' do
     login_as @other_user
     delete meme_url(@meme)
     assert_response :forbidden
   end
 
-  test "should destroy meme as authorized user" do
+  test 'should destroy meme as authorized user' do
     login_as @user
     assert_difference('Meme.count', -1) do
       delete meme_url(@meme)

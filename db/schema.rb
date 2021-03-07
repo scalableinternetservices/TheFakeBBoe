@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 2021_02_24_073310) do
 
   create_table "memes", force: :cascade do |t|
     t.string "title"
+    t.string "image"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "profile_id"
