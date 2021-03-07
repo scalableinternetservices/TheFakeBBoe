@@ -8,6 +8,8 @@ services:
     command: tsung start
     volumes:
       - ./simple.xml:/root/.tsung/tsung.xml:ro
+      - ./profile.xml:/root/.tsung/tsung2.xml:ro
+      - ./bin/:/root/.tsung/bin/:ro
       - ./logs/:/root/.tsung/log
     network_mode: host
 

@@ -12,13 +12,14 @@
   <% end %>
 
   <%= form.label :profile_id, "Profile" %>
-  <%= form.collection_select :profile_id, Profile.order(:name), :id, :name, include_blank: false, prompt: true %>
+  <%= form.collection_select :profile_id, @profiles.order(:name), :id, :name, include_blank: false, prompt: true %>
 
   <%= form.label :title, "Title" %>
   <%= form.text_field :title %>
 
-  <%= form.label :image, "File" %>
-  <%= form.file_field :image %>
+  <%= form.label :image, "Image URL" %>
+  <!-- < %= form.file_field :image % > -->
+  <%= form.text_field :image %>
 
   <%= form.label :tag_field, "Tags" %>
   <%= form.text_field :tag_field, value: meme.tags.map {|t| t.name}.join(",") %>

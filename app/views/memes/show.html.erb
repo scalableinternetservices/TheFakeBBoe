@@ -13,9 +13,5 @@
     <span>Tags: <%= @meme.tags.pluck(:name).join(", ") %></span>
 </div>
 <div>
-    <% if @meme.image.persisted? %>
-        <%= image_tag @meme.image, :class=>'meme' %>
-    <% else %>
-        <span>Image not found</span>
-    <% end %>
+  <img src=<%=@meme.image%> class="meme"> 
 </div>

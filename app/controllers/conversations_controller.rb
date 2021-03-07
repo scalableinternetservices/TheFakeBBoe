@@ -1,7 +1,7 @@
 class ConversationsController < ApplicationController
-  before_action :set_conversation, only: %i[ show edit update destroy addUser writeMessage ]
+  before_action :set_conversation, only: %i[show edit update destroy addUser writeMessage]
   before_action :require_login
-  before_action :check_user, only: %i[ show edit update destroy addUser writeMessage ]
+  before_action :check_user, only: %i[show edit update destroy addUser writeMessage]
   skip_before_action :verify_authenticity_token
 
   # GET /conversations or /conversations.json
@@ -13,7 +13,6 @@ class ConversationsController < ApplicationController
   def show
     @users = @conversation.users
     @messages = @conversation.messages
-
   end
 
   # GET /conversations/new
@@ -22,19 +21,18 @@ class ConversationsController < ApplicationController
   end
 
   # GET /conversations/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /conversations or /conversations.json
   def create
     @conversation = Conversation.new(conversation_params)
     # p "CURREN T USER", current_user
     # p "Conversation useres", @conversation.users
-    
+
     respond_to do |format|
       if @conversation.save
         @conversation.users << current_user
-        format.html { redirect_to @conversation, notice: "Conversation was successfully created." }
+        format.html { redirect_to @conversation, notice: 'Conversation was successfully created.' }
         format.json { render :show, status: :created, location: @conversation }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -47,7 +45,7 @@ class ConversationsController < ApplicationController
   def update
     respond_to do |format|
       if @conversation.update(conversation_params)
-        format.html { redirect_to @conversation, notice: "Conversation was successfully updated." }
+        format.html { redirect_to @conversation, notice: 'Conversation was successfully updated.' }
         format.json { render :show, status: :ok, location: @conversation }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -60,7 +58,7 @@ class ConversationsController < ApplicationController
   def destroy
     @conversation.destroy
     respond_to do |format|
-      format.html { redirect_to conversations_url, notice: "Conversation was successfully destroyed." }
+      format.html { redirect_to conversations_url, notice: 'Conversation was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -69,37 +67,34 @@ class ConversationsController < ApplicationController
     # First, check if the user exists
     username = params[:addUserForm][:username]
     userToAdd = User.find_by_username(username)
-    if (userToAdd != nil and not @conversation.users.include?(userToAdd)) 
-      
+    if !userToAdd.nil? && !@conversation.users.include?(userToAdd)
+
       userToAdd.conversations << @conversation
       # @conversation.users << userToAdd
-      
 
       respond_to do |format|
-        format.html { redirect_to @conversation, notice: "User was successfully added to conversation" }
+        format.html { redirect_to @conversation, notice: 'User was successfully added to conversation' }
         format.json { render :show, status: :ok, location: @conversation }
       end
     else
       # User does not exist
-      @conversation.errors.add(:users, "Invalid username")
+      @conversation.errors.add(:users, 'Invalid username')
       respond_to do |format|
-        format.html { redirect_to @conversation, notice: "Invalid username" }
-        format.json { render :show, status:  :unprocessable_entity, location: @conversation }
+        format.html { redirect_to @conversation, notice: 'Invalid username' }
+        format.json { render :show, status: :unprocessable_entity, location: @conversation }
       end
     end
   end
 
-
   def writeMessage
-
     content = params[:data]
-    newMessage = Message.new(:content => content, :username => current_user.username)
+    newMessage = Message.new(content: content, username: current_user.username)
 
-    if not @conversation.users.include?(current_user) 
+    unless @conversation.users.include?(current_user)
       # User not authorized to add a message to this conversation
-      @conversation.errors.add(:users, "User does not belong to conversation")
+      @conversation.errors.add(:users, 'User does not belong to conversation')
       return
-      
+
     end
 
     newMessage.user_id = current_user.id
@@ -108,24 +103,24 @@ class ConversationsController < ApplicationController
     # if newMessage.save
     #   ChatRoomChannel.broadcast_to @conversation, message: content, username: current_user.username
     # end
-    
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_conversation
-      @conversation = Conversation.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def conversation_params
-      params.require(:conversation).permit(:name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_conversation
+    @conversation = Conversation.find(params[:id])
+  end
 
-    def check_user
-      # Check that the current user owns the conversation. Otherwise redirect
-      if not @conversation.users.include?(current_user)
-        redirect_to conversations_url
-      end
+  # Only allow a list of trusted parameters through.
+  def conversation_params
+    params.require(:conversation).permit(:name)
+  end
+
+  def check_user
+    # Check that the current user owns the conversation. Otherwise redirect
+    unless @conversation.users.include?(current_user)
+      redirect_to conversations_url
     end
+  end
 end
