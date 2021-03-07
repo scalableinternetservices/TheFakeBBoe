@@ -8,7 +8,7 @@
 
   <!-- Server side setup -->
   <servers>
-    <server host="thefakebboeapp.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
+    <server host="danielshu.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
   </servers>
 
 
@@ -96,6 +96,8 @@
       <request subst="true">
             <dyn_variable name="match_success_url" re="[Ll]ocation: (http://.*)\r"/>
             <dyn_variable name="created_conversation_id" re="createdconversation: (.*)\r"/>
+            <!-- <dyn_variable name="created_conversation_id" re="[Ll]ocation: http://.*/matches/matchSuccess/(.*)/%%_user_num%%/%%_user1_id%%"/> -->
+
             <http
             url='/matches/likeProfile?data%5Bprofile_id%5D=%%_user1_id%%'
             version='1.1'

@@ -8,7 +8,7 @@
 
   <!-- Server side setup -->
   <servers>
-    <server host="fakebboeapp.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
+    <server host="thefakebboeapp.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
   </servers>
 
 
@@ -55,14 +55,7 @@
 
   <sessions>
     <session name="http-example" probability="100" type="ts_http">
-      <!-- Checkout homepage -->
-      
-        <setdynvars sourcetype="random_number" start="1" end="1">
-        <var name="user1_id" />
-      </setdynvars>
-     <setdynvars sourcetype="random_number" start="2" end="500">
-        <var name="user_num" />
-      </setdynvars>
+
       <!-- Checkout homepage -->
     <transaction name="login">
       <request>
@@ -75,7 +68,6 @@
         <dyn_variable name="authenticity_token"></dyn_variable>
         <http url='/login' version='1.1' method='GET'></http>
       </request>
-      <thinktime value="2" random="true"></thinktime>
       <thinktime value="5" random="true"></thinktime>
       <request subst="true">
         <http
@@ -83,7 +75,7 @@
           version='1.1'
           method='POST'
           content_type='application/x-www-form-urlencoded'
-          contents='session%5Busername%5D=user%%_user_num%%&amp;session%5Bpassword%5D=password&amp;commit=Log+in'
+          contents='session%5Busername%5D=abc&amp;session%5Bpassword%5D=password&amp;commit=Log+in'
           >
         </http>
       </request>
@@ -94,7 +86,7 @@
       <request>
         <http url='/conversations' version='1.1' method='GET'></http>
       </request>
-      
+      <transaction name="writing_messages">
       <request subst="true">
         <http 
             url='/conversations/1'
@@ -118,7 +110,7 @@
 
        
         <request subst="true">
-            <http url='/conversations/1%%' version='1.1' method='GET'></http>
+            <http url='/conversations/1' version='1.1' method='GET'></http>
         </request>
         
       </for>
