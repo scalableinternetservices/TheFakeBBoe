@@ -1,0 +1,255 @@
+<?xml version="1.0"?>
+<!DOCTYPE tsung SYSTEM "/usr/local/share/tsung/tsung-1.0.dtd" [] >
+<tsung loglevel="notice">
+  <!-- Client side setup -->
+  <clients>
+    <client host="localhost" use_controller_vm="true" maxusers='15000'/>
+  </clients>
+
+  <!-- Server side setup -->
+  <servers>
+    <server host="thefakebboeapp.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
+  </servers>
+
+
+  <load>
+    <arrivalphase phase="1" duration="10" unit="second">
+      <users arrivalrate="1" unit="second"></users>
+    </arrivalphase>
+    <!--<arrivalphase phase="2" duration="10" unit="second">
+      <users arrivalrate="2" unit="second"></users>
+    </arrivalphase>
+    <arrivalphase phase="3" duration="10" unit="second">
+      <users arrivalrate="4" unit="second"></users>
+    </arrivalphase>
+    <arrivalphase phase="4" duration="10" unit="second">
+      <users arrivalrate="8" unit="second"></users>
+    </arrivalphase>
+    <arrivalphase phase="5" duration="10" unit="second">
+      <users arrivalrate="16" unit="second"></users>
+    </arrivalphase>
+    <arrivalphase phase="6" duration="10" unit="second">
+      <users arrivalrate="64" unit="second"></users>
+    </arrivalphase>
+    <arrivalphase phase="7" duration="10" unit="second">
+      <users arrivalrate="256" unit="second"></users>
+    </arrivalphase>
+    <arrivalphase phase="8" duration="10" unit="second">
+      <users arrivalrate="1024" unit="second"></users>
+    </arrivalphase>
+    <arrivalphase phase="9" duration="10" unit="second">
+      <users arrivalrate="2048" unit="second"></users>
+    </arrivalphase>-->
+  </load>
+
+  <options>
+    <!-- Set connection timeout to 2 seconds -->
+    <option name="global_ack_timeout" value="2000"></option>
+
+    <option type="ts_http" name="user_agent">
+      <user_agent probability="100">Mozilla/5.0 (Windows; U; Windows NT 5.2; fr-FR; rv:1.7.8) Gecko/20050511 Firefox/1.0.4</user_agent>
+    </option>
+  </options>
+
+  <sessions>
+    <session name="http-example" probability="100" type="ts_http">
+      <!-- Checkout homepage -->
+      <transaction name="signup">
+      <request>
+        <http url='/' version='1.1' method='GET'></http>
+      </request>
+      <thinktime value="2" random="true"></thinktime>
+
+      <!-- Set login details -->
+      <setdynvars sourcetype="random_number" start="1" end="9999">
+        <var name="user_num1" />
+      </setdynvars>
+      <setdynvars sourcetype="random_number" start="1" end="9999">
+        <var name="user_num2" />
+      </setdynvars>
+      <setdynvars sourcetype="random_string" length="10">
+        <var name="randname"/>
+      </setdynvars>
+
+
+      <!-- Sign up -->
+      <request>
+        <http url='/login' version='1.1' method='GET'></http>
+      </request>
+      <thinktime value="2" random="true"></thinktime>
+      <request>
+        <dyn_variable name="authenticity_token"></dyn_variable>
+        <http url='/signup' version='1.1' method='GET'></http>
+      </request>
+      <thinktime value="5" random="true"></thinktime>
+      <request subst="true">
+        <http
+          url='/users'
+          version='1.1'
+          method='POST'
+          content_type='application/x-www-form-urlencoded'
+          contents='authenticity_token=%%_authenticity_token%%&amp;user%5Busername%5D=user%%_user_num1%%%%_user_num2%%%%_randname%%&amp;user%5Bemail%5D=user%%_user_num2%%%%_randname%%%%_user_num1%%%40example.com&amp;user%5Bpassword%5D=1234512345&amp;user%5Bpassword_confirmation%5D=1234512345&amp;commit=Create+my+account'
+          >
+        </http>
+      </request>
+      </transaction>
+
+      <!-- Go to homepage -->
+      <transaction name="create_profile">
+      <request>
+        <http url='/' version='1.1' method='GET'></http>
+      </request>
+      <thinktime value="2" random="true"></thinktime>
+
+      <!-- Create a profile -->
+      <request><http url='/profiles' version='1.1' method='GET'></http></request>
+      <thinktime value="1" random="true"></thinktime>
+      <request><http url='/profiles/new' version='1.1' method='GET'></http></request>
+        <thinktime value="5" random="true"></thinktime>
+      <request subst="true">
+        <dyn_variable name="created_profile_url" re="[Ll]ocation: (http://.*)\r"/>
+        <dyn_variable name="created_profile_id" re="[Ll]ocation: http://.*/profiles/(.*)\r"/>
+        <http
+        url='/profiles'
+        version='1.1'
+        method='POST'
+        content_type='application/x-www-form-urlencoded'
+        contents='authenticity_token=%%_authenticity_token%%&amp;profile%5Bname%5D=test&amp;profile%5Bage%5D=23&amp;profile%5Blocation%5D=12&amp;profile%5Boccupation%5D=job&amp;profile%5Bbio%5D=hieverone&amp;commit=Create+Profile'
+        >
+        </http>
+      </request>
+      <request subst="true">
+        <http url='%%_created_profile_url%%' version='1.1' method='GET'></http>
+      </request>
+      <thinktime value="2" random="true"></thinktime>
+      </transaction>
+      
+      <transaction name="matching">
+      <request>
+        <http url='/' version='1.1' method='GET'></http>
+      </request>
+        <!-- Now start matching. Like about 50 profiles -->
+      <for var="counter" from="1" to="4" incr="1">
+        <request>
+            <http url='/matches' version='1.1' method='GET'></http>
+        </request>
+        <thinktime value="1" random="true"></thinktime>
+        <request subst="true">
+            <http
+            url='/matches/likeProfile?data%5Bprofile_id%5D=%%_counter%%'
+            version='1.1'
+            method='POST'
+            content_type='application/x-www-form-urlencoded'
+            contents='authenticity_token=%%_authenticity_token%%'
+            >
+            </http>
+        </request>
+      </for>
+      </transaction>
+
+      <!-- Now go to your feeds and start browsing -->
+      <transaction name="user_feeds">
+      <request>
+        <http url='/' version='1.1' method='GET'></http>
+      </request>
+      <thinktime value="2" random="true"></thinktime>
+        <request>
+            <http url='/user_feeds' version='1.1' method='GET'></http>
+        </request>
+      <thinktime value="6" random="true"></thinktime>
+      </transaction>
+
+      <!-- <transaction name="browse_memes">
+        <request>
+        <http url='/' version='1.1' method='GET'></http>
+      </request>
+      <thinktime value="2" random="true"></thinktime>
+        <request>
+            <http url='/memes' version='1.1' method='GET'></http>
+        </request>
+      <thinktime value="8" random="true"></thinktime>
+      </transaction> -->
+      
+
+      <!-- Now create a conversation and start chatting-->
+       
+      <transaction name="create_conversation">
+      <request>
+        <http url='/' version='1.1' method='GET'></http>
+      </request>
+      <thinktime value="2" random="true"></thinktime>
+
+      <request>
+        <http url='/conversations' version='1.1' method='GET'></http>
+      </request>
+      <thinktime value="2" random="true"></thinktime>
+      <request>
+        <http url='/conversations/new' version='1.1' method='GET'></http>
+      </request>
+      <thinktime value="2" random="true"></thinktime>
+      <request subst="true">
+        <dyn_variable name="created_conversation_url" re="[Ll]ocation: (http://.*)\r"/>
+        <dyn_variable name="created_conversation_id" re="[Ll]ocation: http://.*/conversations/(.*)\r"/>
+        <http
+          url='/conversations'
+          version='1.1'
+          method='POST'
+          content_type='application/x-www-form-urlencoded'
+          contents='authenticity_token=%%_authenticity_token%%&amp;conversation%5Bname%5D=test&amp;commit=Create+Conversation'
+          >
+        </http>
+      </request>
+
+      <request subst="true">
+        <http url='%%_created_conversation_url%%' version='1.1' method='GET'></http>
+      </request>
+      <thinktime value="2" random="true"></thinktime>
+
+         
+        <for var="counter" from="2" to="4" incr="1">
+            <request subst="true">
+                <http 
+                    url='%%_created_conversation_url%%/addUser' 
+                    version='1.1'  
+                    method='POST'
+                    content_type='application/x-www-form-urlencoded'
+                    contents='authenticity_token=%%_authenticity_token%%&amp;addUserForm%5Busername%5D=user%%_counter%%&amp;commit=Add+User'
+                ></http>
+            </request>
+            <request subst="true">
+                <http url='%%_created_conversation_url%%' version='1.1' method='GET'></http>
+            </request>
+            <thinktime value="1" random="true"></thinktime>
+        </for>
+      </transaction>
+
+        
+        <!-- Write 100 messages-->
+      
+      <transaction name="messaging">
+      
+      <for var="counter" from="1" to="100" incr="1">
+        <request subst="true">
+            <http
+                url='%%_created_conversation_url%%/writeMessage'
+                version='1.1'
+                method='POST'
+                content_type='application/x-www-form-urlencoded'
+                contents='data=writingmessages'
+                >
+            </http>
+        </request>
+ 
+        <!-- Page needs to be refreshed to see the message -->
+        
+        <request subst="true">
+            <http url='%%_created_conversation_url%%' version='1.1' method='GET'></http>
+        </request>
+        
+    </for>
+    </transaction> 
+    
+
+    </session>
+  </sessions>
+</tsung>
