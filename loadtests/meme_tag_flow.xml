@@ -55,6 +55,9 @@
 
   <sessions>
     <session name="http-example" probability="100" type="ts_http">
+        <setdynvars sourcetype="random_number" start="1" end="499">
+        <var name="user_num" />
+      </setdynvars>
       <!-- Checkout homepage -->
     <transaction name="login">
       <request>
@@ -78,7 +81,7 @@
           version='1.1'
           method='POST'
           content_type='application/x-www-form-urlencoded'
-          contents='session%5Busername%5D=user1&amp;session%5Bpassword%5D=password&amp;commit=Log+in'
+          contents='session%5Busername%5D=user%%_user_num%%&amp;session%5Bpassword%5D=password&amp;commit=Log+in'
           >
         </http>
       </request>
