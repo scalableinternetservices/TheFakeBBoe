@@ -47,7 +47,7 @@ class MatchesController < ApplicationController
         profileFound = Profile.find(params[:data][:profile_id])
         matchUserId = profileFound.user_id
 
-        matchFound = Match.where("liked = FALSE AND sender_id = :match_user_id AND receiver_id = :current_user_id", {current_user_id: current_user.id, match_user_id: matchUserId})
+        matchFound = Match.where("sender_id = :match_user_id AND receiver_id = :current_user_id", {current_user_id: current_user.id, match_user_id: matchUserId})
         helpers.subscribe_if_not_exists(profileFound,current_user)
         if matchFound.count > 0
             p "Match found", matchFound
@@ -61,7 +61,7 @@ class MatchesController < ApplicationController
             if newConversation.save
                 newConversation.users << matchUser
                 newConversation.users << current_user
-
+                response.set_header('createdconversation', "#{newConversation.id}")
                 respond_to do |format|
                     format.html { redirect_to match_success_path(id: newConversation.id, user1_id: current_user.id, user2_id: matchUser.id) }
                     format.json { render :index, status: :ok }
