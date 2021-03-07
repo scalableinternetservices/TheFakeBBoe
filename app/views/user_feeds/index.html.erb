@@ -17,11 +17,7 @@
       <tr>
           <td>
               <span><%= link_to meme.title, meme %></span>
-              <% if meme.image.persisted? %>
-                  <%= image_tag(meme.image) %>
-              <% else %>
-                  <span>Image not found</span>
-              <% end %>
+              <img src=<%=meme.image%> class="meme">
           </td>
       </tr>
     <% end %>
