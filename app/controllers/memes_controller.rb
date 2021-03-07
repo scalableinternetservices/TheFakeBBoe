@@ -32,6 +32,7 @@ class MemesController < ApplicationController
   def new
     @profiles = current_user.profiles
     @meme = Meme.new
+    response.set_header("AVAILABLE_PROFILE", @profiles.first.id)
   end
 
   # GET /memes/1/edit

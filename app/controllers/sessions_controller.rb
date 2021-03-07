@@ -97,7 +97,8 @@ class SessionsController < ApplicationController
       for i in 1..num_memes do
         meme = {
           profile_id: profiles[i % (num_users * num_user_profiles)]['id'],
-          title: "meme#{i}"
+          title: "meme#{i}",
+          image: "https://external-preview.redd.it/zvWqlwlPYK5Sh7BSIuB5lDIsYi7qbk3tlhrouio0UvI.jpg?auto=webp&s=008efa7173755760c2bd1b992707e00a67344b70"
         }
         memes.append(template.merge(meme))
       end

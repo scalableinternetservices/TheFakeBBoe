@@ -90,7 +90,38 @@
       </request>
 
     </transaction>
+      
+      
+
+    <transaction name="upload_meme"> 
+        <request>
+            <http url='/memes' version='1.1' method='GET'></http>
+        </request>
+        <request subst="true">
+            <dyn_variable name="available_profile_id" re="AVAILABLE_PROFILE: (.*)\r"/>
+            <http url='/memes/new' version='1.1' method='GET'></http>
+        </request>
+        <request subst="true">
+            <dyn_variable name="created_meme_url" re="[Ll]ocation: (http://.*)\r"/>
+            <dyn_variable name="created_meme_id" re="[Ll]ocation: http://.*/memes/(.*)\r"/>
+            <http
+            url='/memes'
+            version='1.1'
+            method='POST'
+            content_type='application/x-www-form-urlencoded'
+            contents='meme%5Bprofile_id%5D=%%_available_profile_id%%&amp;meme%5Btitle%5D=test&amp;meme%5Bimage%5D=https%3A%2F%2Fcdn.iwastesomuchtime.com%2FIW-122820180117107.png&amp;meme%5Btag_field%5D=tag1&amp;commit=Create+Meme'
+            >
+        </http>
+      </request>
+        <request subst="true">
+            <http url='%%_created_meme_url%%' version='1.1' method='GET'></http>
+        </request>
+    </transaction>
+    <!-- Browse the meme tag you just created a meme for-->
     <transaction name="tag_browsing">
+        <request>
+            <http url='/' version='1.1' method='GET'></http>
+        </request>
         <request>
             <http url='/tags' version='1.1' method='GET'></http>
         </request>
@@ -115,38 +146,14 @@
             <http url='/tags' version='1.1' method='GET'></http>
         </request>
     </transaction>
-      
-      
-
-    <transaction name="upload_meme"> 
         <request>
-        <http url='/' version='1.1' method='GET'></http>
-      </request>
-        <request>
-            <http url='/memes' version='1.1' method='GET'></http>
-        </request>
-        <request>
-            <http url='/memes/new' version='1.1' method='GET'></http>
-        </request>
-        <request subst="true">
-            <dyn_variable name="created_meme_url" re="[Ll]ocation: (http://.*)\r"/>
-            <dyn_variable name="created_meme_id" re="[Ll]ocation: http://.*/memes/(.*)\r"/>
-            <http
-            url='/memes'
-            version='1.1'
-            method='POST'
-            content_type='application/x-www-form-urlencoded'
-            contents=''
-            >
-        </http>
-      </request>
-        <request subst="true">
-            <http url='%%_created_meme_url%%' version='1.1' method='GET'></http>
+            <http url='/' version='1.1' method='GET'></http>
         </request>
         <thinktime value="3" random="true"></thinktime>
         <request>
             <http url='/memes' version='1.1' method='GET'></http>
         </request>
+    <transaction name="delete_meme">
         <thinktime value="3" random="true"></thinktime>
         <!--Delete the meme you just created-->
         <request subst="true">
