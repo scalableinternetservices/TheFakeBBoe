@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   post   'login'   => 'sessions#create'
   get    'logout'  => 'sessions#destroy'
 
+  get 'seed' => 'sessions#seed'
+  get 'reset' => 'sessions#reset'
+
   resources :users
 
   resources :conversations

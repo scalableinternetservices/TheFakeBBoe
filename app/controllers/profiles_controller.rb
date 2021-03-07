@@ -1,6 +1,8 @@
 class ProfilesController < ApplicationController
   before_action :set_profile, only: %i[show edit update destroy addFriend]
   before_action :require_login
+  skip_before_action :verify_authenticity_token
+  
   # before_action :check_user, only: %i[show edit update destroy addFriend]
 
   # GET /profiles or /profiles.json

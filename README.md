@@ -13,9 +13,9 @@ eb init --keyname $(whoami) \
 ```
 
 ```
-eb create --envvars SECRET_KEY_BASE=BADSECRET \
+eb create --elb-type classic --envvars SECRET_KEY_BASE=BADSECRET \
   -db.engine postgres -db.i db.t3.micro -db.user u \
-  -i t3.micro --single INSERT_SOME_NAME_HERE
+  -i t3.micro INSERT_SOME_NAME_HERE
 ```
 
 After 10-20 minutes, it will finish. Run:

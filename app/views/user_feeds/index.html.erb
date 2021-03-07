@@ -15,7 +15,14 @@
   <tbody>
     <% @feed_memes.each do |meme| %>
       <tr>
-        <td><span><%= meme.title %></span><%= image_tag meme.image %></td>
+          <td>
+              <span><%= link_to meme.title, meme %></span>
+              <% if meme.image.persisted? %>
+                  <%= image_tag(meme.image) %>
+              <% else %>
+                  <span>Image not found</span>
+              <% end %>
+          </td>
       </tr>
     <% end %>
   </tbody>

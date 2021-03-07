@@ -12,7 +12,8 @@
   <tbody>
     <% @memes.each do |meme| %>
       <tr>
-        <td><%= link_to meme.title, meme.image %></td>
+        <td><%= meme.title %></td>
+        <img src=<%=meme.image%> class="meme"> 
       </tr>
     <% end %>
   </tbody>

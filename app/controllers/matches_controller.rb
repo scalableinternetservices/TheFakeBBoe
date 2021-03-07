@@ -1,5 +1,6 @@
 class MatchesController < ApplicationController
     before_action :require_login
+    skip_before_action :verify_authenticity_token
 
     def index
         @match_profiles = []
@@ -47,6 +48,7 @@ class MatchesController < ApplicationController
         matchUserId = profileFound.user_id
 
         matchFound = Match.where("liked = FALSE AND sender_id = :match_user_id AND receiver_id = :current_user_id", {current_user_id: current_user.id, match_user_id: matchUserId})
+        helpers.subscribe_if_not_exists(profileFound,current_user)
         if matchFound.count > 0
             p "Match found", matchFound
             matchFound.each do |match|

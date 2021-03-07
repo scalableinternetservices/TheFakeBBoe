@@ -3,7 +3,7 @@
 <h1><%= @meme.title %></h1>
 
 <div>
-    <span>Created by <%= @meme.user.username %></span>
+    <span>Created by <%= @meme.profile.name %> (<%= @meme.user.username %>)</span>
     <% if logged_in? and @meme.user.id == current_user.id %>
         <%= link_to 'Edit', edit_meme_path(@meme) %> |
         <%= link_to 'Destroy', @meme, method: :delete, data: { confirm: 'Are you sure?' } %> |
