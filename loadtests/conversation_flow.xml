@@ -8,15 +8,15 @@
 
   <!-- Server side setup -->
   <servers>
-    <server host="thelargefakebboeapp.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
+    <server host="fakebboeapp.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
   </servers>
 
 
   <load>
-    <arrivalphase phase="1" duration="10" unit="second">
+    <arrivalphase phase="1" duration="2" unit="second">
       <users arrivalrate="1" unit="second"></users>
     </arrivalphase>
-    <arrivalphase phase="2" duration="10" unit="second">
+    <!--<arrivalphase phase="2" duration="10" unit="second">
       <users arrivalrate="2" unit="second"></users>
     </arrivalphase>
     <arrivalphase phase="3" duration="10" unit="second">
@@ -34,12 +34,12 @@
     <arrivalphase phase="7" duration="10" unit="second">
       <users arrivalrate="256" unit="second"></users>
     </arrivalphase>
-    <!--<arrivalphase phase="8" duration="10" unit="second">
+    <arrivalphase phase="8" duration="10" unit="second">
       <users arrivalrate="1024" unit="second"></users>
     </arrivalphase>
     <arrivalphase phase="9" duration="10" unit="second">
       <users arrivalrate="2048" unit="second"></users>
-    </arrivalphase>-->
+    </arrivalphase> -->
   </load>
 
   <options>
@@ -51,76 +51,63 @@
     </option>
   </options>
 
+  <!-- This test is for when you are chatting in a conversation that already has thousands of messages -->
+
   <sessions>
     <session name="http-example" probability="100" type="ts_http">
       <!-- Checkout homepage -->
+      
+        <setdynvars sourcetype="random_number" start="1" end="1">
+        <var name="user1_id" />
+      </setdynvars>
+     <setdynvars sourcetype="random_number" start="2" end="500">
+        <var name="user_num" />
+      </setdynvars>
+      <!-- Checkout homepage -->
+    <transaction name="login">
       <request>
         <http url='/' version='1.1' method='GET'></http>
       </request>
       <thinktime value="2" random="true"></thinktime>
 
-      <!-- Set login details -->
-      <setdynvars sourcetype="random_number" start="1000" end="9999">
-        <var name="user_num" />
-      </setdynvars>
-
-      <!-- Sign up -->
+      
       <request>
+        <dyn_variable name="authenticity_token"></dyn_variable>
         <http url='/login' version='1.1' method='GET'></http>
       </request>
       <thinktime value="2" random="true"></thinktime>
-      <request>
-        <dyn_variable name="authenticity_token"></dyn_variable>
-        <http url='/signup' version='1.1' method='GET'></http>
-      </request>
       <thinktime value="5" random="true"></thinktime>
       <request subst="true">
         <http
-          url='/users'
+          url='/login'
           version='1.1'
           method='POST'
           content_type='application/x-www-form-urlencoded'
-          contents='authenticity_token=%%_authenticity_token%%&amp;user%5Busername%5D=user%%_user_num%%&amp;user%5Bemail%5D=user%%_user_num%%%40example.com&amp;user%5Bpassword%5D=1234512345&amp;user%5Bpassword_confirmation%5D=1234512345&amp;commit=Create+my+account'
+          contents='session%5Busername%5D=user%%_user_num%%&amp;session%5Bpassword%5D=password&amp;commit=Log+in'
           >
         </http>
       </request>
-
-      <!-- Go to homepage -->
+      </transaction>
       <request>
         <http url='/' version='1.1' method='GET'></http>
       </request>
-      <thinktime value="2" random="true"></thinktime>
-
       <request>
         <http url='/conversations' version='1.1' method='GET'></http>
       </request>
-      <thinktime value="2" random="true"></thinktime>
-      <request>
-        <http url='/conversations/new' version='1.1' method='GET'></http>
-      </request>
-      <thinktime value="2" random="true"></thinktime>
+      
       <request subst="true">
-        <dyn_variable name="created_conversation_url" re="[Ll]ocation: (http://.*)\r"/>
-        <dyn_variable name="created_conversation_id" re="[Ll]ocation: http://.*/conversations/(.*)\r"/>
-        <http
-          url='/conversations'
-          version='1.1'
-          method='POST'
-          content_type='application/x-www-form-urlencoded'
-          contents='authenticity_token=%%_authenticity_token%%&amp;conversation%5Bname%5D=test&amp;commit=Create+Conversation'
-          >
-        </http>
+        <http 
+            url='/conversations/1'
+            version='1.1'
+            method='GET'
+        ></http>
       </request>
-      <request subst="true">
-        <http url='%%_created_conversations_url%%' version='1.1' method='GET'></http>
-      </request>
-      <thinktime value="2" random="true"></thinktime>
-
-      <!-- Write 100 messages-->
-      <for var="counter" from="1" to="100" incr="1">
+      <!-- Chat back and forth for 1000 messages -->
+      
+      <for var="counter" from="1" to="1000" incr="1">
         <request subst="true">
             <http
-                url='/conversations/%%_created_conversation_id%%/writeMessage'
+                url='/conversations/1/writeMessage'
                 version='1.1'
                 method='POST'
                 content_type='application/x-www-form-urlencoded'
@@ -129,12 +116,15 @@
             </http>
         </request>
 
-        <!-- Page needs to be refreshed to see the message -->
+       
         <request subst="true">
-            <http url='%%_created_conversations_url%%' version='1.1' method='GET'></http>
+            <http url='/conversations/1%%' version='1.1' method='GET'></http>
         </request>
         
-    </for>
+      </for>
+      
+
+      </transaction>
 
     </session>
   </sessions>

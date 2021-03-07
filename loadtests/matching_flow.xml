@@ -13,7 +13,7 @@
 
 
   <load>
-    <arrivalphase phase="1" duration="10" unit="second">
+    <arrivalphase phase="1" duration="2" unit="second">
       <users arrivalrate="1" unit="second"></users>
     </arrivalphase>
     <!--<arrivalphase phase="2" duration="10" unit="second">
@@ -94,15 +94,14 @@
 
       <!-- Match with user 1-->
       <request subst="true">
-        <!-- NOTE: Change this id to be the id of user 'abc'-->
             <dyn_variable name="match_success_url" re="[Ll]ocation: (http://.*)\r"/>
-            <dyn_variable name="created_conversation_id" re="[Ll]ocation: http://.*/matches/matchSuccess/(.*)/%%_user_num%%/%%_user1_id%%\r"/>
+            <dyn_variable name="created_conversation_id" re="createdconversation: (.*)\r"/>
             <http
             url='/matches/likeProfile?data%5Bprofile_id%5D=%%_user1_id%%'
             version='1.1'
             method='POST'
             content_type='application/x-www-form-urlencoded'
-            contents=''
+            contents='authenticity_token=%%_authenticity_token%%'
             >
             </http>
       </request>
@@ -114,7 +113,7 @@
         >
         </http>
       </request>
-      <request>
+      <request subst="true">
         <http 
             url='/conversations/%%_created_conversation_id%%'
             version='1.1'
@@ -122,7 +121,9 @@
         ></http>
       </request>
       <!-- Chat back and forth for 20 messages -->
+      
       <for var="counter" from="1" to="20" incr="1">
+      
         <request subst="true">
             <http
                 url='/conversations/%%_created_conversation_id%%/writeMessage'
@@ -134,12 +135,13 @@
             </http>
         </request>
 
-        <!-- Page needs to be refreshed to see the message -->
+       
         <request subst="true">
             <http url='/conversations/%%_created_conversation_id%%' version='1.1' method='GET'></http>
         </request>
         
       </for>
+      
 
       </transaction>
 

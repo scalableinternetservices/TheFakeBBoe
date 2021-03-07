@@ -14,6 +14,7 @@ class SessionsController < ApplicationController
     num_tags = 10
     num_memes = num_users * num_user_profiles
 
+    num_messages = 10000
     template = {
       created_at: Time.now,
       updated_at: Time.now,
@@ -21,8 +22,22 @@ class SessionsController < ApplicationController
     # Create one first user
     first_user = User.create!(username: 'abc', password: 'password', email: 'abc@gmail.com')
     profile1 = Profile.create!(user: first_user, name: 'EdgyMemelord12', age: 120)
+    conversation = Conversation.create!(name: "my-very-long-convo")
+    conversation.users << first_user
 
     ApplicationRecord.transaction do
+
+      messages = []
+      for i in 1..num_messages do
+        message = {
+          user_id: first_user.id,
+          conversation_id: conversation.id,
+          content: "blahblahblah",
+          username: first_user.username
+        }
+        messages.append(template.merge(message))
+      end
+      messages = Message.insert_all!(messages)
       
       puts "adding users..."
       users = []
@@ -118,15 +133,14 @@ class SessionsController < ApplicationController
 
   def reset
     ActiveRecord::Tasks::DatabaseTasks.truncate_all(Rails.env)
-    render json: {:message => 'reset'}.to_json, status: :ok
 
 
     ActiveRecord::Base.connection.tables.each do |table|
-      # if table != "schema_migrations" and table != "ar_internal_metadata"
       puts "Resetting auto increment ID for #{table} to 1"
       ActiveRecord::Base.connection.reset_pk_sequence!(table)
-      # end
     end
+
+    render json: {:message => 'reset'}.to_json, status: :ok
       
   end
 
