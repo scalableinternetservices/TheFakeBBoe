@@ -21,7 +21,11 @@
   <div>
     <p  class='meme-label'><%= meme.title %></p>
   <%=link_to meme do %>
-    <%= image_tag meme.image, :class=>'meme-thumbnail'%>
+      <% if meme.image.persisted? %>
+          <%= image_tag meme.image, :class=>'meme-thumbnail'%>
+      <% else %>
+          <span>Image not found</span>
+      <% end %>
   <% end %>
   </div>
 <% end %>
