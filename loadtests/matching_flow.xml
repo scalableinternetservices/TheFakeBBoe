@@ -54,60 +54,94 @@
   <sessions>
     <session name="http-example" probability="100" type="ts_http">
       <!-- Checkout homepage -->
+      
+        <setdynvars sourcetype="random_number" start="1" end="1">
+        <var name="user1_id" />
+      </setdynvars>
+     <setdynvars sourcetype="random_number" start="2" end="500">
+        <var name="user_num" />
+      </setdynvars>
+      <!-- Checkout homepage -->
+    <transaction name="login">
       <request>
         <http url='/' version='1.1' method='GET'></http>
       </request>
       <thinktime value="2" random="true"></thinktime>
 
-      <!-- Set login details -->
-      <setdynvars sourcetype="random_number" start="1000" end="9999">
-        <var name="user_num" />
-      </setdynvars>
-
-      <!-- Sign up -->
+      
       <request>
+        <dyn_variable name="authenticity_token"></dyn_variable>
         <http url='/login' version='1.1' method='GET'></http>
       </request>
       <thinktime value="2" random="true"></thinktime>
-      <request>
-        <dyn_variable name="authenticity_token"></dyn_variable>
-        <http url='/signup' version='1.1' method='GET'></http>
-      </request>
       <thinktime value="5" random="true"></thinktime>
       <request subst="true">
         <http
-          url='/users'
+          url='/login'
           version='1.1'
           method='POST'
           content_type='application/x-www-form-urlencoded'
-          contents='authenticity_token=%%_authenticity_token%%&amp;user%5Busername%5D=user%%_user_num%%&amp;user%5Bemail%5D=user%%_user_num%%%40example.com&amp;user%5Bpassword%5D=1234512345&amp;user%5Bpassword_confirmation%5D=1234512345&amp;commit=Create+my+account'
+          contents='session%5Busername%5D=user%%_user_num%%&amp;session%5Bpassword%5D=password&amp;commit=Log+in'
           >
         </http>
       </request>
-
-      <!-- Go to homepage -->
+      </transaction>
+      <transaction name="get_match">
       <request>
         <http url='/' version='1.1' method='GET'></http>
-      </request>
+      </request>      
       <thinktime value="2" random="true"></thinktime>
 
-      <for var="counter" from="1" to="10" incr="1">
-        <request>
-            <http url='/matches' version='1.1' method='GET'></http>
-        </request>
-        <thinktime value="0.5" random="true"></thinktime>
-        <request subst="true">
+      <!-- Match with user 1-->
+      <request subst="true">
+        <!-- NOTE: Change this id to be the id of user 'abc'-->
+            <dyn_variable name="match_success_url" re="[Ll]ocation: (http://.*)\r"/>
+            <dyn_variable name="created_conversation_id" re="[Ll]ocation: http://.*/matches/matchSuccess/(.*)/%%_user_num%%/%%_user1_id%%\r"/>
             <http
-            url='/matches/likeProfile?data%5Bprofile_id%5D=%%_counter%%'
+            url='/matches/likeProfile?data%5Bprofile_id%5D=%%_user1_id%%'
             version='1.1'
             method='POST'
             content_type='application/x-www-form-urlencoded'
-            contents='authenticity_token=%%_authenticity_token%%'
+            contents=''
             >
             </http>
+      </request>
+      <request subst="true">
+        <http 
+            url='%%_match_success_url%%'
+            version='1.1'
+            method='GET'
+        >
+        </http>
+      </request>
+      </request>
+        <http 
+            url='/conversations/%%_created_conversation_id%%'
+            version='1.1'
+            method='GET'
+        >
+      </request>
+      <!-- Chat back and forth for 20 messages -->
+      <for var="counter" from="1" to="20" incr="1">
+        <request subst="true">
+            <http
+                url='/conversations/%%_created_conversation_id%%/writeMessage'
+                version='1.1'
+                method='POST'
+                content_type='application/x-www-form-urlencoded'
+                contents='data=writingmessages'
+                >
+            </http>
         </request>
+
+        <!-- Page needs to be refreshed to see the message -->
+        <request subst="true">
+            <http url='/conversations/%%_created_conversation_id%%' version='1.1' method='GET'></http>
+        </request>
+        
       </for>
-      
+
+      </transaction>
 
     </session>
   </sessions>

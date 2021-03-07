@@ -18,9 +18,12 @@ class SessionsController < ApplicationController
       created_at: Time.now,
       updated_at: Time.now,
     }
-
+    # Create one first user
+    first_user = User.create!(username: 'abc', password: '12345678', email: 'abc@gmail.com')
+    profile1 = Profile.create!(user: first_user, name: 'EdgyMemelord12', age: 120)
 
     ApplicationRecord.transaction do
+      
       puts "adding users..."
       users = []
       pw_hash = BCrypt::Password.create('password')
@@ -93,6 +96,21 @@ class SessionsController < ApplicationController
         cur_tag = (cur_tag + 1) % tags.size
       end
       meme_tags = MemeTag.insert_all!(meme_tags)
+
+      puts "adding matches..."
+      # user 1 likes everyone
+      matches = []
+      for u in users do
+        # Match.new( sender_id: current_user.id, receiver_id: matchUserId, liked: false )
+        match = {
+          sender_id: first_user.id,
+          receiver_id: u['id'],
+          liked: false
+        }
+        matches.append(template.merge(match))
+      end
+      matches = Match.insert_all!(matches)
+
     end
 
     render json: {:message => 'seeded'}.to_json, status: :ok
