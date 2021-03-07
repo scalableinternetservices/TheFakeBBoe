@@ -2,7 +2,6 @@ class MemesController < ApplicationController
   before_action :set_meme, only: %i[show edit update destroy]
   before_action :require_login, only: %i[new create edit update destroy]
   before_action :require_owner, only: %i[edit update destroy]
-  # TODO: temporarily disable csrf to make loadtesting easier
   skip_before_action :verify_authenticity_token
 
   # GET /memes or /memes.json
