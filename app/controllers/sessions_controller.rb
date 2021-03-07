@@ -19,7 +19,7 @@ class SessionsController < ApplicationController
       updated_at: Time.now,
     }
     # Create one first user
-    first_user = User.create!(username: 'abc', password: '12345678', email: 'abc@gmail.com')
+    first_user = User.create!(username: 'abc', password: 'password', email: 'abc@gmail.com')
     profile1 = Profile.create!(user: first_user, name: 'EdgyMemelord12', age: 120)
 
     ApplicationRecord.transaction do
@@ -119,6 +119,15 @@ class SessionsController < ApplicationController
   def reset
     ActiveRecord::Tasks::DatabaseTasks.truncate_all(Rails.env)
     render json: {:message => 'reset'}.to_json, status: :ok
+
+
+    ActiveRecord::Base.connection.tables.each do |table|
+      # if table != "schema_migrations" and table != "ar_internal_metadata"
+      puts "Resetting auto increment ID for #{table} to 1"
+      ActiveRecord::Base.connection.reset_pk_sequence!(table)
+      # end
+    end
+      
   end
 
 
