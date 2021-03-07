@@ -8,12 +8,12 @@
 
   <!-- Server side setup -->
   <servers>
-    <server host="fakebboeapp.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
+    <server host="danielshu3.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
   </servers>
 
 
   <load>
-    <arrivalphase phase="1" duration="10" unit="second">
+    <arrivalphase phase="1" duration="2" unit="second">
       <users arrivalrate="1" unit="second"></users>
     </arrivalphase>
     <!--
