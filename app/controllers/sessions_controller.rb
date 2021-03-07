@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
     num_tags = 10
     num_memes = num_users * num_user_profiles
 
-    num_messages = 10000
+    num_messages = 20
     template = {
       created_at: Time.now,
       updated_at: Time.now,
@@ -23,21 +23,9 @@ class SessionsController < ApplicationController
     first_user = User.create!(username: 'abc', password: 'password', email: 'abc@gmail.com')
     profile1 = Profile.create!(user: first_user, name: 'EdgyMemelord12', age: 120)
     conversation = Conversation.create!(name: "my-very-long-convo")
-    conversation.users << first_user
 
     ApplicationRecord.transaction do
 
-      messages = []
-      for i in 1..num_messages do
-        message = {
-          user_id: first_user.id,
-          conversation_id: conversation.id,
-          content: "blahblahblah",
-          username: first_user.username
-        }
-        messages.append(template.merge(message))
-      end
-      messages = Message.insert_all!(messages)
       
       puts "adding users..."
       users = []
@@ -51,7 +39,22 @@ class SessionsController < ApplicationController
         }
         users.append(template.merge(user))
       end
-      users = User.insert_all!(users, returning: [:id]).to_a
+      users = User.insert_all!(users, returning: [:id, :username]).to_a
+
+      puts "adding messages"
+      messages = []
+      for u in users do
+        for i in 1..num_messages do
+          message = {
+            user_id: u['id'],
+            conversation_id: conversation.id,
+            content: "blahblahblah",
+            username: u['username']
+          }
+          messages.append(template.merge(message))
+        end
+      end
+      messages = Message.insert_all!(messages)
 
       puts "adding profiles..."
       profiles = []
@@ -128,7 +131,7 @@ class SessionsController < ApplicationController
       matches = Match.insert_all!(matches)
 
     end
-
+    conversation.users << User.all
     render json: {:message => 'seeded'}.to_json, status: :ok
   end
 
