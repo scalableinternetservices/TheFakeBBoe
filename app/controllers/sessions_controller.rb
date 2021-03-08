@@ -8,13 +8,13 @@ class SessionsController < ApplicationController
 
   def seed
     # parameters
-    num_users = 500
+    num_users = 1000
     num_user_profiles = 3
     num_user_subs = 5
     num_tags = 10
     num_memes = num_users * num_user_profiles
 
-    num_messages = 20
+    num_messages = 10
     template = {
       created_at: Time.now,
       updated_at: Time.now,

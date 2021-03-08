@@ -8,15 +8,15 @@
 
   <!-- Server side setup -->
   <servers>
-    <server host="danielshu3.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
+    <server host="largethefakebboeapp.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
   </servers>
 
 
   <load>
-    <arrivalphase phase="1" duration="1" unit="second">
+    <arrivalphase phase="1" duration="10" unit="second">
       <users arrivalrate="1" unit="second"></users>
     </arrivalphase>
-    <!--<arrivalphase phase="2" duration="10" unit="second">
+    <arrivalphase phase="2" duration="10" unit="second">
       <users arrivalrate="2" unit="second"></users>
     </arrivalphase>
     <arrivalphase phase="3" duration="10" unit="second">
@@ -29,14 +29,14 @@
       <users arrivalrate="16" unit="second"></users>
     </arrivalphase>
     <arrivalphase phase="6" duration="10" unit="second">
-      <users arrivalrate="64" unit="second"></users>
+      <users arrivalrate="32" unit="second"></users>
     </arrivalphase>
     <arrivalphase phase="7" duration="10" unit="second">
-      <users arrivalrate="256" unit="second"></users>
+      <users arrivalrate="64" unit="second"></users>
     </arrivalphase>
     <arrivalphase phase="8" duration="10" unit="second">
-      <users arrivalrate="1024" unit="second"></users>
-    </arrivalphase>-->
+      <users arrivalrate="128" unit="second"></users>
+    </arrivalphase>   
   </load>
 
   <options>
@@ -52,7 +52,7 @@
 
   <sessions>
     <session name="http-example" probability="100" type="ts_http">
-        <setdynvars sourcetype="random_number" start="1" end="500">
+        <setdynvars sourcetype="random_number" start="1" end="1000">
         <var name="user_num" />
       </setdynvars>
       <!-- Checkout homepage -->
@@ -96,7 +96,6 @@
       <!-- Chat back and forth for 1000 messages -->
       
       <for var="counter" from="1" to="1000" incr="1">
-        <thinktime value="1" random="true"></thinktime>
         <request subst="true">
             <http
                 url='/conversations/1/writeMessage'
