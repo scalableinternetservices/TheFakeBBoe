@@ -67,8 +67,8 @@ ActiveRecord::Schema.define(version: 2021_02_24_073310) do
   end
 
   create_table "meme_tags", id: false, force: :cascade do |t|
-    t.bigint "tag_id"
-    t.bigint "meme_id"
+    t.bigint "tag_id", null: false
+    t.bigint "meme_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["meme_id"], name: "index_meme_tags_on_meme_id"
@@ -149,6 +149,8 @@ ActiveRecord::Schema.define(version: 2021_02_24_073310) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "matches", "users", column: "receiver_id"
   add_foreign_key "matches", "users", column: "sender_id"
+  add_foreign_key "meme_tags", "memes"
+  add_foreign_key "meme_tags", "tags"
   add_foreign_key "memes", "profiles"
   add_foreign_key "messages", "conversations"
   add_foreign_key "messages", "users"

@@ -1,6 +1,7 @@
 class UserFeedsController < ApplicationController
   #before_action :set_user_feed, only: %i[ show edit update destroy ]
   before_action :require_login
+  skip_before_action :verify_authenticity_token
 
   # GET /user_feeds or /user_feeds.json
   def index

@@ -17,7 +17,7 @@ end
 class Meme < ApplicationRecord
   belongs_to :profile
   delegate :user, to: :profile
-  has_many :meme_tags
+  has_many :meme_tags, dependent: :delete_all
   has_many :tags, through: :meme_tags
   validates :image, http_url: true
   # validates :image, presence: true

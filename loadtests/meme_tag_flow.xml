@@ -37,7 +37,7 @@
     <arrivalphase phase="8" duration="10" unit="second">
       <users arrivalrate="128" unit="second"></users>
     </arrivalphase> 
-
+    
   </load>
 
   <options>
@@ -51,12 +51,7 @@
 
   <sessions>
     <session name="http-example" probability="100" type="ts_http">
-      <!-- Checkout homepage -->
-      
-        <setdynvars sourcetype="random_number" start="1" end="1">
-        <var name="user1_id" />
-      </setdynvars>
-     <setdynvars sourcetype="random_number" start="2" end="1000">
+        <setdynvars sourcetype="random_number" start="2" end="1000">
         <var name="user_num" />
       </setdynvars>
       <!-- Checkout homepage -->
@@ -66,12 +61,15 @@
       </request>
       <thinktime value="2" random="true"></thinktime>
 
-      
+      <!-- Sign up -->
       <request>
-        <dyn_variable name="authenticity_token"></dyn_variable>
         <http url='/login' version='1.1' method='GET'></http>
       </request>
       <thinktime value="2" random="true"></thinktime>
+      <!-- <request>
+        <dyn_variable name="authenticity_token"></dyn_variable>
+        <http url='/signup' version='1.1' method='GET'></http>
+      </request> -->
       <thinktime value="5" random="true"></thinktime>
       <request subst="true">
         <http
@@ -83,67 +81,88 @@
           >
         </http>
       </request>
-      </transaction>
-      <transaction name="get_match">
       <request>
         <http url='/' version='1.1' method='GET'></http>
-      </request>      
-      <thinktime value="2" random="true"></thinktime>
+      </request>
 
-      <!-- Match with user 1-->
-      <request subst="true">
-            <dyn_variable name="match_success_url" re="[Ll]ocation: (http://.*)\r"/>
-            <dyn_variable name="created_conversation_id" re="createdconversation: (.*)\r"/>
-            <!-- <dyn_variable name="created_conversation_id" re="[Ll]ocation: http://.*/matches/matchSuccess/(.*)/%%_user_num%%/%%_user1_id%%"/> -->
+    </transaction>
+      
+      
 
+    <transaction name="upload_meme"> 
+        <request>
+            <http url='/memes' version='1.1' method='GET'></http>
+        </request>
+        <request subst="true">
+            <dyn_variable name="available_profile_id" re="AVAILABLE_PROFILE: (.*)\r"/>
+            <http url='/memes/new' version='1.1' method='GET'></http>
+        </request>
+        <request subst="true">
+            <dyn_variable name="created_meme_url" re="[Ll]ocation: (http://.*)\r"/>
+            <dyn_variable name="created_meme_id" re="[Ll]ocation: http://.*/memes/(.*)\r"/>
             <http
-            url='/matches/likeProfile?data%5Bprofile_id%5D=%%_user1_id%%'
+            url='/memes'
             version='1.1'
             method='POST'
             content_type='application/x-www-form-urlencoded'
-            contents='authenticity_token=%%_authenticity_token%%'
+            contents='meme%5Bprofile_id%5D=%%_available_profile_id%%&amp;meme%5Btitle%5D=test&amp;meme%5Bimage%5D=https%3A%2F%2Fcdn.iwastesomuchtime.com%2FIW-122820180117107.png&amp;meme%5Btag_field%5D=tag1&amp;commit=Create+Meme'
             >
-            </http>
-      </request>
-      <request subst="true">
-        <http 
-            url='%%_match_success_url%%'
-            version='1.1'
-            method='GET'
-        >
         </http>
       </request>
-      <request subst="true">
-        <http 
-            url='/conversations/%%_created_conversation_id%%'
-            version='1.1'
-            method='GET'
-        ></http>
-      </request>
-      <!-- Chat back and forth for 20 messages -->
-      
-      <for var="counter" from="1" to="20" incr="1">
-      
+        <request subst="true">
+            <http url='%%_created_meme_url%%' version='1.1' method='GET'></http>
+        </request>
+    </transaction>
+    <!-- Browse the meme tag you just created a meme for-->
+    <transaction name="tag_browsing">
+        <request>
+            <http url='/' version='1.1' method='GET'></http>
+        </request>
+        <request>
+            <http url='/tags' version='1.1' method='GET'></http>
+        </request>
+        <request>
+            <http url='/memes/browse/tag1' version='1.1' method='GET'></http>
+        </request>
+        <thinktime value="3" random="true"></thinktime>
+        <request>
+            <http url='/tags' version='1.1' method='GET'></http>
+        </request>
+        <request>
+            <http url='/memes/browse/tag2' version='1.1' method='GET'></http>
+        </request>
+        <thinktime value="3" random="true"></thinktime>
+         <request>
+            <http url='/tags' version='1.1' method='GET'></http>
+        </request>
+        <request>
+            <http url='/memes/browse/tag3' version='1.1' method='GET'></http>
+        </request>
+        <request>
+            <http url='/tags' version='1.1' method='GET'></http>
+        </request>
+    </transaction>
+        <request>
+            <http url='/' version='1.1' method='GET'></http>
+        </request>
+        <thinktime value="3" random="true"></thinktime>
+        <request>
+            <http url='/memes' version='1.1' method='GET'></http>
+        </request>
+    <transaction name="delete_meme">
+        <thinktime value="3" random="true"></thinktime>
+        <!--Delete the meme you just created-->
         <request subst="true">
             <http
-                url='/conversations/%%_created_conversation_id%%/writeMessage'
-                version='1.1'
-                method='POST'
-                content_type='application/x-www-form-urlencoded'
-                contents='data=writingmessages'
-                >
-            </http>
+            url='%%_created_meme_url%%'
+            version='1.1'
+            method='POST'
+            content_type='application/x-www-form-urlencoded'
+            contents='_method=delete'
+            >
+        </http>
         </request>
-
-       
-        <request subst="true">
-            <http url='/conversations/%%_created_conversation_id%%' version='1.1' method='GET'></http>
-        </request>
-        
-      </for>
-      
-
-      </transaction>
+    </transaction>
 
     </session>
   </sessions>

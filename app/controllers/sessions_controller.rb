@@ -8,19 +8,25 @@ class SessionsController < ApplicationController
 
   def seed
     # parameters
-    num_users = 500
+    num_users = 1000
     num_user_profiles = 3
     num_user_subs = 5
     num_tags = 10
     num_memes = num_users * num_user_profiles
 
+    num_messages = 10
     template = {
       created_at: Time.now,
       updated_at: Time.now,
     }
-
+    # Create one first user
+    first_user = User.create!(username: 'abc', password: 'password', email: 'abc@gmail.com')
+    profile1 = Profile.create!(user: first_user, name: 'EdgyMemelord12', age: 120)
+    conversation = Conversation.create!(name: "my-very-long-convo")
 
     ApplicationRecord.transaction do
+
+      
       puts "adding users..."
       users = []
       pw_hash = BCrypt::Password.create('password')
@@ -33,7 +39,22 @@ class SessionsController < ApplicationController
         }
         users.append(template.merge(user))
       end
-      users = User.insert_all!(users, returning: [:id]).to_a
+      users = User.insert_all!(users, returning: [:id, :username]).to_a
+
+      puts "adding messages"
+      messages = []
+      for u in users do
+        for i in 1..num_messages do
+          message = {
+            user_id: u['id'],
+            conversation_id: conversation.id,
+            content: "blahblahblah",
+            username: u['username']
+          }
+          messages.append(template.merge(message))
+        end
+      end
+      messages = Message.insert_all!(messages)
 
       puts "adding profiles..."
       profiles = []
@@ -79,7 +100,8 @@ class SessionsController < ApplicationController
       for i in 1..num_memes do
         meme = {
           profile_id: profiles[i % (num_users * num_user_profiles)]['id'],
-          title: "meme#{i}"
+          title: "meme#{i}",
+          image: "https://external-preview.redd.it/zvWqlwlPYK5Sh7BSIuB5lDIsYi7qbk3tlhrouio0UvI.jpg?auto=webp&s=008efa7173755760c2bd1b992707e00a67344b70"
         }
         memes.append(template.merge(meme))
       end
@@ -93,14 +115,37 @@ class SessionsController < ApplicationController
         cur_tag = (cur_tag + 1) % tags.size
       end
       meme_tags = MemeTag.insert_all!(meme_tags)
-    end
 
+      puts "adding matches..."
+      # user 1 likes everyone
+      matches = []
+      for u in users do
+        # Match.new( sender_id: current_user.id, receiver_id: matchUserId, liked: false )
+        match = {
+          sender_id: first_user.id,
+          receiver_id: u['id'],
+          liked: false
+        }
+        matches.append(template.merge(match))
+      end
+      matches = Match.insert_all!(matches)
+
+    end
+    conversation.users << User.all
     render json: {:message => 'seeded'}.to_json, status: :ok
   end
 
   def reset
     ActiveRecord::Tasks::DatabaseTasks.truncate_all(Rails.env)
+
+
+    ActiveRecord::Base.connection.tables.each do |table|
+      puts "Resetting auto increment ID for #{table} to 1"
+      ActiveRecord::Base.connection.reset_pk_sequence!(table)
+    end
+
     render json: {:message => 'reset'}.to_json, status: :ok
+      
   end
 
 
