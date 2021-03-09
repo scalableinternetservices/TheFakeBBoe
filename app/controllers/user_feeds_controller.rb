@@ -5,7 +5,7 @@ class UserFeedsController < ApplicationController
 
   # GET /user_feeds or /user_feeds.json
   def index
-    subbed_profiles = current_user.feed_profiles
+    subbed_profiles = current_user.feed_profiles.includes(:memes)
     memes = []
     for prof in subbed_profiles
       memes = memes.concat(prof.memes.to_a)
