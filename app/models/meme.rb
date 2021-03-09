@@ -20,6 +20,7 @@ class Meme < ApplicationRecord
   has_many :meme_tags, dependent: :delete_all
   has_many :tags, through: :meme_tags
   validates :image, http_url: true
+  paginates_per 50
   # validates :image, presence: true
 
   # has_one_attached :image do |attachable|

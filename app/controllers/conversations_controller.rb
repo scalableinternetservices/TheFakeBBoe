@@ -6,7 +6,7 @@ class ConversationsController < ApplicationController
 
   # GET /conversations or /conversations.json
   def index
-    @conversations = current_user.conversations
+    @conversations = current_user.conversations.page params[:page]
   end
 
   # GET /conversations/1 or /conversations/1.json

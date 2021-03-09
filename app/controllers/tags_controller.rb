@@ -3,7 +3,7 @@ class TagsController < ApplicationController
   skip_before_action :verify_authenticity_token
   # GET /tags or /tags.json
   def index
-    @tags = Tag.all
+    @tags = Tag.all.page params[:page]
   end
 
 

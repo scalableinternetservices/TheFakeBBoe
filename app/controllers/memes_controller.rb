@@ -6,7 +6,7 @@ class MemesController < ApplicationController
 
   # GET /memes or /memes.json
   def index
-    @memes = Meme.includes(:profile).all
+    @memes = Meme.includes(:profile).all.page params[:page]
   end
 
   def browse_by_tag

@@ -2,17 +2,17 @@ class ProfilesController < ApplicationController
   before_action :set_profile, only: %i[show edit update destroy addFriend]
   before_action :require_login
   skip_before_action :verify_authenticity_token
-  
+
   # before_action :check_user, only: %i[show edit update destroy addFriend]
 
   # GET /profiles or /profiles.json
   def index
-    @profiles = current_user.profiles
+    @profiles = current_user.profiles.page params[:page]
   end
 
   # GET /profiles/1 or /profiles/1.json
   def show
-    @memes = @profile.memes
+    @memes = @profile.memes.page params[:page]
   end
 
   # GET /profiles/new
