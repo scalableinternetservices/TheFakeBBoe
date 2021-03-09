@@ -8,6 +8,7 @@
 .navbar-appname {
     align-self: flex-start;
     font-size: 1.5rem;
+		text-decoration: none;
 }
 
 .navbar-buttons {
