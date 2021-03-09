@@ -15,13 +15,20 @@
   <tbody>
     <% @feed_memes.each do |meme| %>
       <tr>
-          <td>
-              <span><%= link_to meme.title, meme %></span>
-              <img src=<%=meme.image%> class="meme">
-          </td>
+        <table>
+          <td><%= meme.title %></td>
+          <td><%= link_to 'Show', meme %></td>
+        </table>
+      </tr>
+      <tr>
+        <td>
+          <img src=<%= meme.image %> class="meme">
+          <br /><br />
+        </td>
       </tr>
     <% end %>
   </tbody>
+
 </table>
 
 <br>
