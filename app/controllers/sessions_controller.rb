@@ -19,14 +19,13 @@ class SessionsController < ApplicationController
       created_at: Time.now,
       updated_at: Time.now,
     }
-    # Create one first user
-    first_user = User.create!(username: 'abc', password: 'password', email: 'abc@gmail.com')
-    profile1 = Profile.create!(user: first_user, name: 'EdgyMemelord12', age: 120)
-    conversation = Conversation.create!(name: "my-very-long-convo")
 
     ApplicationRecord.transaction do
+      # Create one first user
+      first_user = User.create!(username: 'abc', password: 'password', email: 'abc@gmail.com')
+      Profile.create!(user: first_user, name: 'EdgyMemelord12', age: 120)
+      conversation = Conversation.create!(name: "my-very-long-convo")
 
-      
       puts "adding users..."
       users = []
       pw_hash = BCrypt::Password.create('password')
@@ -40,6 +39,10 @@ class SessionsController < ApplicationController
         users.append(template.merge(user))
       end
       users = User.insert_all!(users, returning: [:id, :username]).to_a
+
+      puts "inserting users into long conversation..."
+      conversation.users << first_user
+      UsersConversation.insert_all!(users.map { |u| { user_id: u['id'], conversation_id: conversation.id } })
 
       puts "adding messages"
       messages = []
@@ -129,9 +132,7 @@ class SessionsController < ApplicationController
         matches.append(template.merge(match))
       end
       matches = Match.insert_all!(matches)
-
     end
-    conversation.users << User.all
     render json: {:message => 'seeded'}.to_json, status: :ok
   end
 
