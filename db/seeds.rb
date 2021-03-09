@@ -37,6 +37,7 @@ profile5 = Profile.create!(user: user3, name: 'the_fake_bboe', age: 1)
 
 feed1 = UserFeedSubscription.create!(user: user2, profile: profile1)
 feed2 = UserFeedSubscription.create!(user: user3, profile: profile1)
+feed3 = UserFeedSubscription.create!(user: user2, profile: profile2)
 
 tag1 = Tag.create!(name: 'Funny')
 tag2 = Tag.create!(name: 'WTF')
