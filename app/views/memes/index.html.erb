@@ -14,7 +14,7 @@
       <tr>
         <td><%= meme.title %></td>
         <td><%= link_to 'Show', meme %></td>
-        <% if logged_in? and meme.user.id == current_user.id %>
+        <% if logged_in? and meme.profile.user_id == current_user.id %>
             <td><%= link_to 'Edit', edit_meme_path(meme) %></td>
             <td><%= link_to 'Destroy', meme, method: :delete, data: { confirm: 'Are you sure?' } %></td>
         <% end %>
