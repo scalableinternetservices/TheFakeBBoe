@@ -12,7 +12,7 @@ require("jquery")
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
-import consumer from '../channels/consumer'
+// import consumer from '../channels/consumer'
 
 $(document).on('turbolinks:load', function () {
     
@@ -27,46 +27,46 @@ $(document).on('turbolinks:load', function () {
     });
 })
 
-$(document).on('turbolinks:load', function () {
-    if (this.subscription) {
-        consumer.subscriptions.remove(this.subscription)
-        consumer.disconnect();
-        this.subscription = null;
-    }
+// $(document).on('turbolinks:load', function () {
+//     if (this.subscription) {
+//         consumer.subscriptions.remove(this.subscription)
+//         consumer.disconnect();
+//         this.subscription = null;
+//     }
 
-    if ($('#chatroom').attr('data-chatroom-id')) {
-        var sub = consumer.subscriptions.create({
-            channel: "ChatRoomChannel",
-            chatroom_id: $('#chatroom').attr('data-chatroom-id')
-        }, {
-            connected() {
-                // Called when the subscription is ready for use on the server
-                // console.log("Connected to the chat room")
-            },
+//     if ($('#chatroom').attr('data-chatroom-id')) {
+//         var sub = consumer.subscriptions.create({
+//             channel: "ChatRoomChannel",
+//             chatroom_id: $('#chatroom').attr('data-chatroom-id')
+//         }, {
+//             connected() {
+//                 // Called when the subscription is ready for use on the server
+//                 // console.log("Connected to the chat room")
+//             },
 
-            disconnected() {
-                // Called when the subscription has been terminated by the server
-                // console.log("Disconnected from chatroom")
-            },
+//             disconnected() {
+//                 // Called when the subscription has been terminated by the server
+//                 // console.log("Disconnected from chatroom")
+//             },
 
-            received(data) {
-                if (data.message) {
-                    if (userName === data.username) {
-                        $('#messages').append(`<div class='message sent'>` + data.message + '</div>')
-                        lastUsername = data.username;
-                    }
-                    else {
-                        if (lastUsername !== data.username) {
-                            $('#messages').append(`<div class='userlabel'>` + data.username + ':</div>')
-                            lastUsername = data.username;
-                        }
-                        $('#messages').append(`<div class='message received'>` + data.message + '</div>')
-                    }
+//             received(data) {
+//                 if (data.message) {
+//                     if (userName === data.username) {
+//                         $('#messages').append(`<div class='message sent'>` + data.message + '</div>')
+//                         lastUsername = data.username;
+//                     }
+//                     else {
+//                         if (lastUsername !== data.username) {
+//                             $('#messages').append(`<div class='userlabel'>` + data.username + ':</div>')
+//                             lastUsername = data.username;
+//                         }
+//                         $('#messages').append(`<div class='message received'>` + data.message + '</div>')
+//                     }
 
-                    $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
-                }
-            },
-        });
-        this.subscription = sub;
-    }
-});
+//                     $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight") }, 1000);
+//                 }
+//             },
+//         });
+//         this.subscription = sub;
+//     }
+// });

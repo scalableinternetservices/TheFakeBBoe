@@ -12,7 +12,7 @@ class ConversationsController < ApplicationController
   # GET /conversations/1 or /conversations/1.json
   def show
     @users = @conversation.users
-    @messages = @conversation.messages
+    @messages = @conversation.messages.last(20)
   end
 
   # GET /conversations/new
