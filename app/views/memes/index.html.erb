@@ -12,17 +12,27 @@
   <tbody>
     <% @memes.each do |meme| %>
       <tr>
-        <td><%= meme.title %></td>
-        <td><%= link_to 'Show', meme %></td>
-        <% if logged_in? and meme.profile.user_id == current_user.id %>
-            <td><%= link_to 'Edit', edit_meme_path(meme) %></td>
-            <td><%= link_to 'Destroy', meme, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <% end %>
+        <table>
+          <td><%= meme.title %></td>
+          <td><%= link_to 'Show', meme %></td>
+          <% if logged_in? and meme.profile.user_id == current_user.id %>
+              <td><%= link_to 'Edit', edit_meme_path(meme) %></td>
+              <td><%= link_to 'Destroy', meme, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <% end %>
+        </table>
+      </tr>
+      <tr>
+        <td>
+          <img src=<%= meme.image %> class="meme">
+          <br /><br />
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
+<br>
+    <%= paginate @memes %>
 <br>
 
 <%= link_to 'New Meme', new_meme_path %>

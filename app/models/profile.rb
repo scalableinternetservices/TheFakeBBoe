@@ -3,4 +3,6 @@ class Profile < ApplicationRecord
 
   belongs_to :user
   has_many :memes, dependent: :destroy
+
+  paginates_per 10
 end

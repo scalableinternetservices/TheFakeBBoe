@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Memes</h1>
+<h1>Memes about <%= @tag %></h1>
 
 <table>
   <thead>
@@ -12,11 +12,21 @@
   <tbody>
     <% @memes.each do |meme| %>
       <tr>
-        <td><%= meme.title %></td>
-        <img src=<%=meme.image%> class="meme"> 
+        <table>
+          <td><%= meme.title %></td>
+          <td><%= link_to 'Show', meme %></td>
+        </table>
+      </tr>
+      <tr>
+        <td>
+          <img src=<%= meme.image %> class="meme">
+          <br /><br />
+        </td>
       </tr>
     <% end %>
   </tbody>
+
+  
 </table>
 
 <br>

@@ -15,15 +15,24 @@
   <tbody>
     <% @feed_memes.each do |meme| %>
       <tr>
-          <td>
-              <span><%= link_to meme.title, meme %></span>
-              <img src=<%=meme.image%> class="meme">
-          </td>
+        <table>
+          <td><%= meme.title %></td>
+          <td><%= link_to 'Show', meme %></td>
+        </table>
+      </tr>
+      <tr>
+        <td>
+          <img src=<%= meme.image %> class="meme">
+          <br /><br />
+        </td>
       </tr>
     <% end %>
   </tbody>
+
 </table>
 
+<br>
+<%= paginate @feed_memes %>
 <br>
 
 <%#= link_to 'New User Feed', new_user_feed_path %>

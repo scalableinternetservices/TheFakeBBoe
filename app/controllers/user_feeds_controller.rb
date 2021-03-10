@@ -1,5 +1,5 @@
 class UserFeedsController < ApplicationController
-  #before_action :set_user_feed, only: %i[ show edit update destroy ]
+  # before_action :set_user_feed, only: %i[ show edit update destroy ]
   before_action :require_login
   skip_before_action :verify_authenticity_token
 
@@ -10,39 +10,39 @@ class UserFeedsController < ApplicationController
     for prof in subbed_profiles
       memes = memes.concat(prof.memes.to_a)
     end
-    @feed_memes = memes
+    @feed_memes = Kaminari.paginate_array(memes).page(params[:page]).per(10)
   end
 
-    # GET /user_feeds/1 or /user_feeds/1.json
+  # GET /user_feeds/1 or /user_feeds/1.json
   def show
-    render :status => 404
+    render status: 404
   end
 
   def new
-    render :status => 404
+    render status: 404
   end
-  
+
   def edit
-    render :status => 404
+    render status: 404
   end
 
   def update
-    render :status => 404
+    render status: 404
   end
 
   def destroy
-    render :status => 404
+    render status: 404
   end
 
-
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user_feed
-      #@user_feed = UserFeed.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def user_feed_params
-      params.fetch(:user_feed, {})
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_user_feed
+    # @user_feed = UserFeed.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def user_feed_params
+    params.fetch(:user_feed, {})
+  end
 end
