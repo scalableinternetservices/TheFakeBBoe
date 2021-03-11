@@ -31,8 +31,13 @@ class MemesController < ApplicationController
   # GET /memes/new
   def new
     @profiles = current_user.profiles
-    @meme = Meme.new
-    response.set_header("AVAILABLE_PROFILE", @profiles.first.id)
+    if @profiles.empty?
+      flash[:error] = 'You must create at least one profile before you can upload memes.'
+      redirect_to controller: 'profiles', action: 'new'
+    else
+      @meme = Meme.new
+      response.set_header("AVAILABLE_PROFILE", @profiles.first.id)
+    end
   end
 
   # GET /memes/1/edit
