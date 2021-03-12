@@ -8,7 +8,7 @@
 
   <!-- Server side setup -->
   <servers>
-    <server host="largethefakebboeapp.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
+    <server host="danielshuscaled2.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
   </servers>
 
 

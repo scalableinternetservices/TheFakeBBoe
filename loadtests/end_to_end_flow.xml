@@ -8,7 +8,7 @@
 
   <!-- Server side setup -->
   <servers>
-    <server host="largethefakebboeapp.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
+    <server host="danielshu2.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
   </servers>
 
 
@@ -28,15 +28,21 @@
     <arrivalphase phase="5" duration="10" unit="second">
       <users arrivalrate="16" unit="second"></users>
     </arrivalphase>
-    <!--<arrivalphase phase="6" duration="10" unit="second">
-      <users arrivalrate="64" unit="second"></users>
+    <arrivalphase phase="6" duration="10" unit="second">
+      <users arrivalrate="32" unit="second"></users>
     </arrivalphase>
     <arrivalphase phase="7" duration="10" unit="second">
-      <users arrivalrate="256" unit="second"></users>
+      <users arrivalrate="64" unit="second"></users>
     </arrivalphase>
     <arrivalphase phase="8" duration="10" unit="second">
+      <users arrivalrate="128" unit="second"></users>
+    </arrivalphase> 
+    <arrivalphase phase="9" duration="10" unit="second">
+      <users arrivalrate="256" unit="second"></users>
+    </arrivalphase>
+    <arrivalphase phase="10" duration="10" unit="second">
       <users arrivalrate="512" unit="second"></users>
-    </arrivalphase> -->
+    </arrivalphase>
   </load>
 
   <options>

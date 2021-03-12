@@ -8,7 +8,7 @@
 
   <!-- Server side setup -->
   <servers>
-    <server host="largethefakebboeapp.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
+    <server host="danielshuscaled2.eba-pdqnzpxm.us-west-2.elasticbeanstalk.com" port="80" type="tcp"></server>
   </servers>
 
 
@@ -84,12 +84,13 @@
         </http>
       </request>
       </transaction>
-      <transaction name="get_match">
       <request>
         <http url='/' version='1.1' method='GET'></http>
-      </request>      
+      </request> 
       <thinktime value="2" random="true"></thinktime>
-
+      <transaction name="matching">
+           
+      
       <!-- Match with user 1-->
       <request subst="true">
             <dyn_variable name="match_success_url" re="[Ll]ocation: (http://.*)\r"/>
@@ -97,7 +98,7 @@
             <!-- <dyn_variable name="created_conversation_id" re="[Ll]ocation: http://.*/matches/matchSuccess/(.*)/%%_user_num%%/%%_user1_id%%"/> -->
 
             <http
-            url='/matches/likeProfile?data%5Bprofile_id%5D=%%_user1_id%%'
+            url='/matches/likeProfile?data%5Bprofile_id%5D=1'
             version='1.1'
             method='POST'
             content_type='application/x-www-form-urlencoded'
@@ -113,6 +114,8 @@
         >
         </http>
       </request>
+      </transaction>
+      <transaction name="chatting">
       <request subst="true">
         <http 
             url='/conversations/%%_created_conversation_id%%'
@@ -139,11 +142,11 @@
         <request subst="true">
             <http url='/conversations/%%_created_conversation_id%%' version='1.1' method='GET'></http>
         </request>
-        
+          
       </for>
-      
-
       </transaction>
+
+      
 
     </session>
   </sessions>
