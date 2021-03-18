@@ -99,10 +99,10 @@ class ConversationsController < ApplicationController
 
     newMessage.user_id = current_user.id
     newMessage.conversation_id = @conversation.id
-    newMessage.save
-    # if newMessage.save
-    #   ChatRoomChannel.broadcast_to @conversation, message: content, username: current_user.username
-    # end
+    # newMessage.save
+    if newMessage.save
+      ChatRoomChannel.broadcast_to @conversation, message: content, username: current_user.username
+    end
   end
 
   private
